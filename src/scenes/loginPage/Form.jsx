@@ -15,20 +15,26 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "state";
 import FlexBetween from "components/FlexBetween";
 
-const currentDate = Date();
+const currentDate = new Date().toISOString().substr(0, 10);
 
 const registerSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  phoneNumber: yup.string().required("required"),
-  birthday: yup.date().required("required").max(currentDate),
-  password: yup.string().required("required"),
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  email: yup.string().email("invalid email").required("Email is required"),
+  phoneNumber: yup
+    .number("Invalid phone number")
+    .positive("Invalid phone number")
+    .required("Phone number is required"),
+  birthday: yup.date().required("Birthday is required").max(currentDate),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password is too short - should be 8 chars minimum."),
 });
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
+  email: yup.string().email("invalid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
 });
 
 const initialValuesRegister = {
@@ -53,6 +59,7 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+  const [loginError, setLoginError] = useState("");
 
   const register = async (values, onSubmitProps) => {
     const savedUserResponse = await fetch(
@@ -75,14 +82,19 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+    const loggedInResponse = await fetch(
+      "http://localhost:3001/api/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      }
+    );
     const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    if (loggedIn) {
+    if (loggedInResponse.status === 400) {
+      setLoginError("Email or password is incorrect");
+    } else if (loggedIn) {
+      onSubmitProps.resetForm();
       dispatch(
         setLogin({
           user: loggedIn.user,
@@ -157,11 +169,17 @@ const Form = () => {
                   onChange={handleChange}
                   values={values.phoneNumber}
                   name="phoneNumber"
-                  error={Boolean(touched.phoneNumber) && Boolean(errors.email)}
+                  error={
+                    Boolean(touched.phoneNumber) && Boolean(errors.phoneNumber)
+                  }
                   helperText={touched.phoneNumber && errors.phoneNumber}
                   sx={{ gridColumn: "span 4" }}
                 />
-                <Typography fontWeight="400" variant="h5" sx={{ gridColumn: "span 4" }}>
+                <Typography
+                  fontWeight="400"
+                  variant="h5"
+                  sx={{ gridColumn: "span 4" }}
+                >
                   Birthday
                 </Typography>
                 <input
@@ -169,10 +187,9 @@ const Form = () => {
                   label="Birthday"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.birthday}
+                  value={values.birthday || ""}
+                  max={currentDate}
                   name="birthday"
-                  error={Boolean(touched.birthday) && Boolean(errors.birthday)}
-                  helperText={touched.birthday && errors.birthday}
                   sx={{ gridColumn: "span 4" }}
                 />
               </>
@@ -200,6 +217,14 @@ const Form = () => {
             />
           </Box>
           <Box>
+            {loginError && (
+              <Typography
+                color="error"
+                sx={{ gridColumn: "span 4", mt: "1rem" }}
+              >
+                {loginError}
+              </Typography>
+            )}
             <Button
               fullWidth
               type="submit"
@@ -213,6 +238,7 @@ const Form = () => {
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
+
             <Typography
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");

@@ -33,6 +33,7 @@ const Navbar = () => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAuth = Boolean(useSelector((state) => state.token));
   const user = useSelector((state) => state.user);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
@@ -47,7 +48,7 @@ const Navbar = () => {
     firstName = `${user.firstName}`;
   }
 
-  if (!user) {
+  if (!isAuth) {
     return (
       <FlexBetween padding="1rem 6%" backgroundColor={alt}>
         <FlexBetween gap="1.75rem">
