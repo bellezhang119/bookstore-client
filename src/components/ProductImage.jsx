@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 
-const ProductImage = ({ image, size = "60px" }) => {
+const ProductImage = ({ image, width = "150px", height = "230px" }) => {
   return (
-    <Box width={size} height={size}>
+    <Box width={width} height={height} marginBottom="1rem">
       <img
-        style={{ objectFit: "cover", borderRadius: "5%" }}
-        width={size}
-        height={size}
+        style={{ objectFit: "cover" }}
+        width={width}
+        height={height}
         alt="product"
         src={`http://localhost:3001/assets/${image}`}
       />

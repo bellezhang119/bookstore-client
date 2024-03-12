@@ -41,12 +41,7 @@ export const {
   setLogin,
   setLogout,
   setOrders,
-  setOrder,
   setCart,
-  addToCart,
-  removeFromCart,
   setWishlist,
-  addToWishlist,
-  removeFromWishlist,
 } = authSlice.actions;
 export default authSlice.reducer;
