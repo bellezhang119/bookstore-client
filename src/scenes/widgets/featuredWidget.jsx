@@ -15,7 +15,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCart, setWishlist } from "state";
+import { addToCart, addToWishlist } from "state";
 
 const FeaturedWidget = () => {
   const dispatch = useDispatch();
@@ -33,9 +33,6 @@ const FeaturedWidget = () => {
   const _id = user ? user._id : null;
   const token = useSelector((state) => state.token);
   const isAuth = Boolean(useSelector((state) => state.token));
-
-  const cart = useSelector((state) => state.cart);
-  const wishlist = useSelector((state) => state.wishlist);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
@@ -57,41 +54,49 @@ const FeaturedWidget = () => {
     setPicturePath(product.picturePath);
   };
 
-  const addToCart = async () => {
+  const addToCartDB = async () => {
     if (!isAuth) {
       navigate("/login");
-    } else if (!featuredProduct) {
+    } else if (featuredProduct) {
       const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/cart/${featuredProduct._id}`,
+        `http://localhost:3001/api/users/${_id}/cart/add/${featuredProduct._id}`,
         {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ action: "add" }),
         }
       );
-      const newCart = [...cart, featuredProduct];
-      dispatch(setCart({ cart: newCart }));
+
+      if (response.ok) {
+        dispatch(addToCart(featuredProduct._id));
+        console.log("Item added to cart");
+      } else {
+        console.error("Failed to add item to cart");
+      }
     }
   };
 
-  const addToWishlist = async () => {
+  const addToWishlistDB = async () => {
     if (!isAuth) {
       navigate("login");
-    } else if (!featuredProduct) {
+    } else if (featuredProduct) {
       const response = await fetch(
-        `http:localhost:3001/api/users/${_id}/cart/${featuredProduct._id}`,
+        `http://localhost:3001/api/users/${_id}/wishlist/add/${featuredProduct._id}`,
         {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ action: "add" }),
         }
       );
-      const newWishlist = [...wishlist, featuredProduct];
-      dispatch(setWishlist({ wishlist: newWishlist }));
+      
+      if (response.ok) {
+        dispatch(addToWishlist(featuredProduct._id));
+        console.log("Item added to wishlist");
+      } else {
+        console.error("Failed to add item to wishlist");
+      }
     }
   };
 
@@ -111,7 +116,10 @@ const FeaturedWidget = () => {
             {featuredProduct?.productName}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Publish Date: {featuredProduct?.publishDate}
+            Publish Date:{" "}
+            {featuredProduct
+              ? new Date(featuredProduct.publishDate).toLocaleDateString()
+              : ""}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Author: {featuredProduct?.author}
@@ -130,7 +138,7 @@ const FeaturedWidget = () => {
               <Button
                 variant="outlined"
                 startIcon={<AddShoppingCart />}
-                onClick={addToCart}
+                onClick={addToCartDB}
                 sx={{
                   backgroundColor: primary,
                   color: palette.background.alt,
@@ -145,7 +153,7 @@ const FeaturedWidget = () => {
               <Button
                 variant="outlined"
                 startIcon={<FavoriteBorder />}
-                onClick={addToWishlist}
+                onClick={addToWishlistDB}
                 sx={{
                   color: primary,
                   backgroundColor: palette.background.alt,

@@ -30,8 +30,80 @@ export const authSlice = createSlice({
     setCart: (state, action) => {
       state.cart = action.payload.cart;
     },
+    addToCart: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        state.cart[existingItemIndex].quantity++;
+      } else {
+        state.cart.push({ productId, quantity: 1 });
+      }
+    },
+    removeFromCart: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        if (state.cart[existingItemIndex].quantity !== 1) {
+          state.cart[existingItemIndex].quantity--;
+        } else {
+          state.cart.splice(existingItemIndex, 1);
+        }
+      }
+    },
+    deleteFromCart: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        state.cart.splice(existingItemIndex, 1);
+      }
+    },
     setWishlist: (state, action) => {
       state.wishlist = action.payload.wishlist;
+    },
+    addToWishlist: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.wishlist.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        state.wishlist[existingItemIndex].quantity++;
+      } else {
+        state.wishlist.push({ productId, quantity: 1 });
+      }
+    },
+    removeFromWishlis: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.wishlist.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        if (state.wishlist[existingItemIndex].quantity !== 1) {
+          state.wishlist[existingItemIndex].quantity--;
+        } else {
+          state.wishlist.splice(existingItemIndex, 1);
+        }
+      }
+    },
+    deleteFromWishlis: (state, action) => {
+      const { productId } = action.payload;
+      const existingItemIndex = state.wishlist.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        state.wishlist.splice(existingItemIndex, 1);
+      }
     },
   },
 });
@@ -42,6 +114,12 @@ export const {
   setLogout,
   setOrders,
   setCart,
+  addToCart,
+  removeFromCart,
+  deleteFromCart,
   setWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  deleteFromWishlist,
 } = authSlice.actions;
 export default authSlice.reducer;
