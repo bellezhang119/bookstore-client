@@ -1,7 +1,6 @@
 import { AddShoppingCart, FavoriteBorder } from "@mui/icons-material";
 import {
   Box,
-  Divider,
   Typography,
   InputBase,
   useTheme,
@@ -37,6 +36,11 @@ const FeaturedWidget = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+
+  const cartButtonTextDesktop = "Add To Cart";
+  const cartButtonTextMobile = "Cart";
+  const wishlistButtonTextDesktop = "Add To Wishlist";
+  const wishlistButtonTextMobile = "Wishlist";
 
   useEffect(() => {
     getFeaturedProduct();
@@ -122,7 +126,7 @@ const FeaturedWidget = () => {
               : ""}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Author: {featuredProduct?.author}
+            Author: {featuredProduct?.authorNames.join(", ")}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Category: {featuredProduct?.categoryList.join(", ")}
@@ -148,7 +152,7 @@ const FeaturedWidget = () => {
                   },
                 }}
               >
-                Add to Cart
+                {isNonMobileScreens ? cartButtonTextDesktop : cartButtonTextMobile}
               </Button>
               <Button
                 variant="outlined"
@@ -164,7 +168,7 @@ const FeaturedWidget = () => {
                   },
                 }}
               >
-                Add to Wishlist
+                {isNonMobileScreens ? wishlistButtonTextDesktop : wishlistButtonTextMobile}
               </Button>
             </Box>
           </FlexBetween>

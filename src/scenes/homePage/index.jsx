@@ -14,14 +14,10 @@ const HomePage = () => {
         padding="0.5rem 6%"
         display={isNonMobileScreens ? "flex" : "block"}
         gap="0.5rem"
-        justifyContent="space-between"
+        justifyContent="center"
+        mt="2rem"
       >
-        <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <FeaturedWidget />
-        </Box>
+        <FeaturedWidget />
       </Box>
     </Box>
   );
