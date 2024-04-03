@@ -2,7 +2,6 @@ import { AddShoppingCart, FavoriteBorder } from "@mui/icons-material";
 import {
   Box,
   Typography,
-  InputBase,
   useTheme,
   Button,
   IconButton,
@@ -20,7 +19,6 @@ const FeaturedWidget = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [image, setImage] = useState(null);
   const [featuredProduct, setFeaturedProduct] = useState(null);
   const [picturePath, setPicturePath] = useState("");
 
@@ -106,14 +104,14 @@ const FeaturedWidget = () => {
 
   return (
     <WidgetWrapper>
-      <Box marginBottom="1rem">
+      <Box>
         <Typography variant="h2" color="primary" fontWeight="500" gutterBottom>
           Featured Book Today
         </Typography>
       </Box>
       <FlexBetween gap="1.5rem">
         <Box>
-          <ProductImage image={picturePath} />
+          <ProductImage image={picturePath} width="150px" height="230px" />
         </Box>
         <Box>
           <Typography variant="h4" color="main" marginBottom="1rem">

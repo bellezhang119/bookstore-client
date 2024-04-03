@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const ProductImage = ({ image, width = "150px", height = "230px" }) => {
+const ProductImage = ({ image, width, height }) => {
   return (
     <Box width={width} height={height} marginBottom="1rem">
       <img
