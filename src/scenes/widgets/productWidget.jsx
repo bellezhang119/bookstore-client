@@ -15,12 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart, addToWishlist } from "state";
 
-const FeaturedWidget = () => {
+const ProductWidget = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [featuredProduct, setFeaturedProduct] = useState(null);
-  const [picturePath, setPicturePath] = useState("");
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -40,28 +37,12 @@ const FeaturedWidget = () => {
   const wishlistButtonTextDesktop = "Add To Wishlist";
   const wishlistButtonTextMobile = "Wishlist";
 
-  useEffect(() => {
-    getFeaturedProduct();
-  }, []);
-
-  const getFeaturedProduct = async () => {
-    const response = await fetch(`http://localhost:3001/api/products/`, {
-      method: "GET",
-    });
-
-    const products = await response.json();
-
-    const product = products[0];
-    setFeaturedProduct(product);
-    setPicturePath(product.picturePath);
-  };
-
   const addToCartDB = async () => {
     if (!isAuth) {
       navigate("/login");
-    } else if (featuredProduct) {
+    } else if (product) {
       const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/cart/add/${featuredProduct._id}`,
+        `http://localhost:3001/api/users/${_id}/cart/add/${product._id}`,
         {
           method: "PATCH",
           headers: {
@@ -71,7 +52,7 @@ const FeaturedWidget = () => {
       );
 
       if (response.ok) {
-        dispatch(addToCart(featuredProduct._id));
+        dispatch(addToCart(product._id));
         console.log("Item added to cart");
       } else {
         console.error("Failed to add item to cart");
@@ -82,9 +63,9 @@ const FeaturedWidget = () => {
   const addToWishlistDB = async () => {
     if (!isAuth) {
       navigate("login");
-    } else if (featuredProduct) {
+    } else if (product) {
       const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/wishlist/add/${featuredProduct._id}`,
+        `http://localhost:3001/api/users/${_id}/wishlist/add/${product._id}`,
         {
           method: "PATCH",
           headers: {
@@ -94,7 +75,7 @@ const FeaturedWidget = () => {
       );
       
       if (response.ok) {
-        dispatch(addToWishlist(featuredProduct._id));
+        dispatch(addToWishlist(product._id));
         console.log("Item added to wishlist");
       } else {
         console.error("Failed to add item to wishlist");
@@ -104,33 +85,28 @@ const FeaturedWidget = () => {
 
   return (
     <WidgetWrapper>
-      <Box>
-        <Typography variant="h2" color="primary" fontWeight="500" gutterBottom>
-          Featured Book Today
-        </Typography>
-      </Box>
       <FlexBetween gap="1.5rem">
         <Box>
-          <ProductImage image={picturePath} width="150px" height="230px" />
+          <ProductImage image={product.picturePath} width="150px" height="230px" />
         </Box>
         <Box>
-          <Typography variant="h4" color="main" marginBottom="1rem">
-            {featuredProduct?.productName}
+          <Typography variant="h3" color="main" marginBottom="1rem">
+            {product?.productName}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Publish Date:{" "}
-            {featuredProduct
-              ? new Date(featuredProduct.publishDate).toLocaleDateString()
+            {product
+              ? new Date(product.publishDate).toLocaleDateString()
               : ""}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Author: {featuredProduct?.authorNames.join(", ")}
+            Author: {product?.authorNames.join(", ")}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Category: {featuredProduct?.categoryList.join(", ")}
+            Category: {product?.categoryList.join(", ")}
           </Typography>
           <Typography variant="body1" paragraph>
-            {featuredProduct?.description}
+            {product?.description}
           </Typography>
           <FlexBetween gap="1rem">
             <Box
@@ -176,4 +152,4 @@ const FeaturedWidget = () => {
   );
 };
 
-export default FeaturedWidget;
+export default ProductWidget;

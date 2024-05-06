@@ -3,30 +3,32 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "scenes/navbar";
-import FeaturedWidget from "scenes/widgets/featuredWidget";
+import ProductWidget from "scenes/widgets/productWidget";
 import CardWidget from "scenes/widgets/cardWidget";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const [productList, setProductList] = useState([]);
+  const [featuredProduct, setFeaturedProduct] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [cardDisplayed, setCardDisplayed] = useState(4);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    getCardProducts();
+    getProducts();
   }, []);
 
   useEffect(() => {
     setCardDisplayed(isNonMobileScreens ? 4 : 2);
   }, [isNonMobileScreens]);
 
-  const getCardProducts = async () => {
+  const getProducts = async () => {
     const response = await fetch(`http://localhost:3001/api/products/`, {
       method: "GET",
     });
 
     const products = await response.json();
+    setFeaturedProduct(products[1]);
     setProductList(products.slice(0, 12));
   };
 
@@ -56,11 +58,11 @@ const HomePage = () => {
       >
         {isNonMobileScreens ? (
           <Box margin="1rem" maxWidth="60%">
-            <FeaturedWidget />
+            {featuredProduct && <ProductWidget product={featuredProduct} />}
           </Box>
         ) : (
           <Box margin="1rem" maxWidth="90%">
-            <FeaturedWidget />
+            {featuredProduct && <ProductWidget product={featuredProduct} />}
           </Box>
         )}
 
@@ -70,10 +72,10 @@ const HomePage = () => {
           </IconButton>
 
           <Box
+          marginBottom="1rem"
             display="flex"
             flexDirection="row"
             alignItems="center"
-            overflowX="auto"
           >
             {productList.slice(startIndex, startIndex + cardDisplayed).map((item) => (
               <Box key={item.id} marginX="3px">
