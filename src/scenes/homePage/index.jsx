@@ -72,16 +72,18 @@ const HomePage = () => {
           </IconButton>
 
           <Box
-          marginBottom="1rem"
+            marginBottom="1rem"
             display="flex"
             flexDirection="row"
             alignItems="center"
           >
-            {productList.slice(startIndex, startIndex + cardDisplayed).map((item) => (
-              <Box key={item.id} marginX="3px">
-                <CardWidget product={item} />
-              </Box>
-            ))}
+            {productList
+              .slice(startIndex, startIndex + cardDisplayed)
+              .map((item) => (
+                <Box key={item.id} marginX="3px" >
+                  <CardWidget key={item.id} product={item} />
+                </Box>
+              ))}
           </Box>
 
           <IconButton onClick={handleNextClick} disabled={isNextDisabled}>

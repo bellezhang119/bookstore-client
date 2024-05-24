@@ -30,7 +30,7 @@ import FlexBetween from "components/FlexBetween";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuth = Boolean(useSelector((state) => state.token));
@@ -48,10 +48,18 @@ const Navbar = () => {
     firstName = `${user.firstName}`;
   }
 
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const navigateToSearch = () => {
+    navigate(`/search/?query=${encodeURIComponent(searchText)}`);
+  };
+
   if (!isAuth) {
     return (
       <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-        <FlexBetween gap="1.75rem">
+        <FlexBetween gap="1.75rem" width="100%">
           <Typography
             fontWeight="bold"
             fontSize="clamp(1rem, 2rem, 2.25rem)"
@@ -66,16 +74,23 @@ const Navbar = () => {
           >
             Bookstore
           </Typography>
-
           <FlexBetween
             backgroundColor={neutralLight}
             borderRadius="9px"
-            gap="3rem"
-            padding="0.1rem 0.5rem 0.1rem 1.5rem"
-            margin="0.1rem 1rem 0.1rem 0.1rem"
+            padding="0.1rem 1rem 0.1rem 1rem"
+            marginRight="1.5rem"
+            width="100%"
           >
-            <InputBase placeholder="Search..." />
-            <IconButton>
+            <InputBase
+              placeholder="Search..."
+              value={searchText}
+              onChange={handleSearchChange}
+              sx={{ flexGrow: 1, width: "100%" }}
+              onKeyUp={(event) => {
+                if (event.key == "Enter") navigateToSearch();
+              }}
+            />
+            <IconButton onClick={() => navigateToSearch()}>
               <Search />
             </IconButton>
           </FlexBetween>
@@ -160,12 +175,12 @@ const Navbar = () => {
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-      <FlexBetween gap="1.75rem">
+      <FlexBetween gap="1.75rem" width="100%">
         <Typography
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           color="primary"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/")}
           sx={{
             "&:hover": {
               color: primaryLight,
@@ -178,11 +193,20 @@ const Navbar = () => {
         <FlexBetween
           backgroundColor={neutralLight}
           borderRadius="9px"
-          gap="3rem"
-          padding="0.1rem 1.5rem"
+          padding="0.1rem 1rem 0.1rem 1rem"
+          marginRight="1.5rem"
+          width="100%"
         >
-          <InputBase placeholder="Search..." />
-          <IconButton>
+          <InputBase
+            placeholder="Search..."
+            value={searchText}
+            onChange={handleSearchChange}
+            onKeyUp={(event) => {
+              if (event.key == "Enter") navigateToSearch();
+            }}
+            sx={{ flexGrow: 1, width: "100%" }}
+          />
+          <IconButton onClick={() => navigateToSearch()}>
             <Search />
           </IconButton>
         </FlexBetween>

@@ -73,7 +73,7 @@ const ProductWidget = ({ product }) => {
           },
         }
       );
-      
+
       if (response.ok) {
         dispatch(addToWishlist(product._id));
         console.log("Item added to wishlist");
@@ -84,10 +84,14 @@ const ProductWidget = ({ product }) => {
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper marginBottom="0.5rem">
       <FlexBetween gap="1.5rem">
         <Box>
-          <ProductImage image={product.picturePath} width="150px" height="230px" />
+          <ProductImage
+            image={product.picturePath}
+            width="150px"
+            height="230px"
+          />
         </Box>
         <Box>
           <Typography variant="h3" color="main" marginBottom="1rem">
@@ -95,9 +99,7 @@ const ProductWidget = ({ product }) => {
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Publish Date:{" "}
-            {product
-              ? new Date(product.publishDate).toLocaleDateString()
-              : ""}
+            {product ? new Date(product.publishDate).toLocaleDateString() : ""}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Author: {product?.authorNames.join(", ")}
@@ -126,7 +128,9 @@ const ProductWidget = ({ product }) => {
                   },
                 }}
               >
-                {isNonMobileScreens ? cartButtonTextDesktop : cartButtonTextMobile}
+                {isNonMobileScreens
+                  ? cartButtonTextDesktop
+                  : cartButtonTextMobile}
               </Button>
               <Button
                 variant="outlined"
@@ -142,7 +146,9 @@ const ProductWidget = ({ product }) => {
                   },
                 }}
               >
-                {isNonMobileScreens ? wishlistButtonTextDesktop : wishlistButtonTextMobile}
+                {isNonMobileScreens
+                  ? wishlistButtonTextDesktop
+                  : wishlistButtonTextMobile}
               </Button>
             </Box>
           </FlexBetween>
