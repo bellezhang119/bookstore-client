@@ -33,7 +33,7 @@ const SearchPage = () => {
     try {
       const queryParams = new URLSearchParams({
         search: query,
-        categories: filters.categories?.join(',') || "",
+        categories: filters.categories?.join(",") || "",
         minPrice: filters.minPrice || "",
         maxPrice: filters.maxPrice || "",
         sort: sort,
@@ -74,36 +74,31 @@ const SearchPage = () => {
   ];
 
   return (
-    <div>
+    <Box>
       <Navbar />
-      <FilterSortWidget
-        categories={categories}
-        onFilterChange={handleApplyFilters}
-        onSortChange={handleSortChange}
-      />
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        sx={{ paddingTop: "96px", display: "flex", justifyContent: "center" }}
       >
-        {isNonMobileScreens ? (
-          <Box margin="1rem" maxWidth="60%">
-            {searchResults.map((product) => (
-              <ProductWidget key={product._id} product={product} />
-            ))}
-          </Box>
-        ) : (
-          <Box margin="1rem" maxWidth="90%">
-            {searchResults.map((product) => (
-              <ProductWidget key={product._id} product={product} />
-            ))}
-          </Box>
-        )}
+        <Grid container spacing={3} sx={{ maxWidth: "1200px" }}>
+          <Grid item xs={12} md={3}>
+            <Box sx={{ position: "sticky", top: "96px" }}>
+              <FilterSortWidget
+                categories={categories}
+                onFilterChange={handleApplyFilters}
+                onSortChange={handleSortChange}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={9}>
+            <Box>
+              {searchResults.map((product) => (
+                <ProductWidget key={product._id} product={product} />
+              ))}
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
-    </div>
+    </Box>
   );
 };
 

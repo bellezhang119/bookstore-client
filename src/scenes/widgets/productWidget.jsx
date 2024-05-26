@@ -110,6 +110,9 @@ const ProductWidget = ({ product }) => {
           <Typography variant="body1" paragraph>
             {product?.description}
           </Typography>
+          <Typography variant="h4" paragraph>
+            ${product?.productPrice}
+          </Typography>
           <FlexBetween gap="1rem">
             <Box
               color="main"

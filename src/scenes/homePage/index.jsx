@@ -54,7 +54,9 @@ const HomePage = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          paddingTop: '80px'
         }}
+        
       >
         {isNonMobileScreens ? (
           <Box margin="1rem" maxWidth="60%">

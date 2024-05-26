@@ -56,125 +56,17 @@ const Navbar = () => {
     navigate(`/search/?query=${encodeURIComponent(searchText)}`);
   };
 
-  if (!isAuth) {
-    return (
-      <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-        <FlexBetween gap="1.75rem" width="100%">
-          <Typography
-            fontWeight="bold"
-            fontSize="clamp(1rem, 2rem, 2.25rem)"
-            color="primary"
-            onClick={() => navigate("/")}
-            sx={{
-              "&:hover": {
-                color: primaryLight,
-                cursor: "pointer",
-              },
-            }}
-          >
-            Bookstore
-          </Typography>
-          <FlexBetween
-            backgroundColor={neutralLight}
-            borderRadius="9px"
-            padding="0.1rem 1rem 0.1rem 1rem"
-            marginRight="1.5rem"
-            width="100%"
-          >
-            <InputBase
-              placeholder="Search..."
-              value={searchText}
-              onChange={handleSearchChange}
-              sx={{ flexGrow: 1, width: "100%" }}
-              onKeyUp={(event) => {
-                if (event.key == "Enter") navigateToSearch();
-              }}
-            />
-            <IconButton onClick={() => navigateToSearch()}>
-              <Search />
-            </IconButton>
-          </FlexBetween>
-        </FlexBetween>
-
-        {/* DESKTOP NAV */}
-        {isNonMobileScreens ? (
-          <FlexBetween gap="2rem">
-            <IconButton onClick={() => dispatch(setMode())}>
-              {theme.palette.mode === "dark" ? (
-                <DarkMode sx={{ fontSize: "25px" }} />
-              ) : (
-                <LightMode sx={{ color: dark, fontSize: "25px" }} />
-              )}
-            </IconButton>
-            <Button
-              onClick={() => navigate("/login")}
-              sx={{ fontSize: "20px" }}
-            >
-              Login/Register
-            </Button>
-          </FlexBetween>
-        ) : (
-          <IconButton
-            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-          >
-            <Menu />
-          </IconButton>
-        )}
-
-        {/* MOBILE NAV */}
-        {!isNonMobileScreens && isMobileMenuToggled && (
-          <Box
-            position="fixed"
-            right="0"
-            bottom="0"
-            height="100%"
-            zIndex="10"
-            maxWidth="500px"
-            minWidth="300px"
-            backgroundColor={background}
-          >
-            {/* CLOSE ICON */}
-            <Box display="flex" justifyContent="flex-end" p="1rem">
-              <IconButton
-                onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-              >
-                <Close />
-              </IconButton>
-            </Box>
-
-            {/* MENU ITEMS */}
-            <FlexBetween
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              gap="3rem"
-            >
-              <IconButton
-                onClick={() => dispatch(setMode())}
-                sx={{ fontSize: "25px" }}
-              >
-                {theme.palette.mode === "dark" ? (
-                  <DarkMode sx={{ fontSize: "25px" }} />
-                ) : (
-                  <LightMode sx={{ color: dark, fontSize: "25px" }} />
-                )}
-              </IconButton>
-              <Button
-                onClick={() => navigate("/login")}
-                sx={{ fontSize: "15px" }}
-              >
-                Login/Register
-              </Button>
-            </FlexBetween>
-          </Box>
-        )}
-      </FlexBetween>
-    );
-  }
-
   return (
-    <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+    <FlexBetween
+      padding="1rem 6%"
+      backgroundColor={alt}
+      sx={{
+        position: 'fixed',
+        top: 0,
+        width: '100%',
+        zIndex: 1000,
+      }}
+    >
       <FlexBetween gap="1.75rem" width="100%">
         <Typography
           fontWeight="bold"
@@ -202,7 +94,7 @@ const Navbar = () => {
             value={searchText}
             onChange={handleSearchChange}
             onKeyUp={(event) => {
-              if (event.key == "Enter") navigateToSearch();
+              if (event.key === "Enter") navigateToSearch();
             }}
             sx={{ flexGrow: 1, width: "100%" }}
           />
@@ -222,40 +114,46 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Person sx={{ fontSize: "25px" }} />
-          <ShoppingCart sx={{ fontSize: "25px" }} />
-          <Favorite sx={{ fontSize: "25px" }} />
-          <RequestPage sx={{ fontSize: "25px" }} />
-          <Settings sx={{ fontSize: "25px" }} />
-          <FormControl variant="standard" value={firstName}>
-            <Select
-              value={firstName}
-              sx={{
-                backgroundColor: neutralLight,
-                width: "150px",
-                borderRadius: "0.25rem",
-                p: "0.25rem 1rem",
-                "& .MuiSvgIcon-root": {
-                  pr: "0.25rem",
-                  width: "3rem",
-                },
-                "& .MuiSelect-select:focus": {
-                  backgroundColor: neutralLight,
-                },
-              }}
-              input={<InputBase />}
-            >
-              <MenuItem value={firstName}>
-                <Typography>{firstName}</Typography>
-              </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
-            </Select>
-          </FormControl>
+          {isAuth ? (
+            <>
+              <Person sx={{ fontSize: "25px" }} />
+              <ShoppingCart sx={{ fontSize: "25px" }} />
+              <Favorite sx={{ fontSize: "25px" }} />
+              <RequestPage sx={{ fontSize: "25px" }} />
+              <Settings sx={{ fontSize: "25px" }} />
+              <FormControl variant="standard" value={firstName}>
+                <Select
+                  value={firstName}
+                  sx={{
+                    backgroundColor: neutralLight,
+                    width: "150px",
+                    borderRadius: "0.25rem",
+                    p: "0.25rem 1rem",
+                    "& .MuiSvgIcon-root": {
+                      pr: "0.25rem",
+                      width: "3rem",
+                    },
+                    "& .MuiSelect-select:focus": {
+                      backgroundColor: neutralLight,
+                    },
+                  }}
+                  input={<InputBase />}
+                >
+                  <MenuItem value={firstName}>
+                    <Typography>{firstName}</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+                </Select>
+              </FormControl>
+            </>
+          ) : (
+            <Button onClick={() => navigate("/login")} sx={{ fontSize: "20px" }}>
+              Login/Register
+            </Button>
+          )}
         </FlexBetween>
       ) : (
-        <IconButton
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-        >
+        <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
           <Menu />
         </IconButton>
       )}
@@ -274,9 +172,7 @@ const Navbar = () => {
         >
           {/* CLOSE ICON */}
           <Box display="flex" justifyContent="flex-end" p="1rem">
-            <IconButton
-              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-            >
+            <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
               <Close />
             </IconButton>
           </Box>
@@ -289,47 +185,52 @@ const Navbar = () => {
             alignItems="center"
             gap="3rem"
           >
-            <IconButton
-              onClick={() => dispatch(setMode())}
-              sx={{ fontSize: "25px" }}
-            >
+            <IconButton onClick={() => dispatch(setMode())} sx={{ fontSize: "25px" }}>
               {theme.palette.mode === "dark" ? (
                 <DarkMode sx={{ fontSize: "25px" }} />
               ) : (
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Person sx={{ fontSize: "25px" }} />
-            <ShoppingCart sx={{ fontSize: "25px" }} />
-            <Favorite sx={{ fontSize: "25px" }} />
-            <RequestPage sx={{ fontSize: "25px" }} />
-            <Settings sx={{ fontSize: "25px" }} />
-            <FormControl variant="standard" value={firstName}>
-              <Select
-                value={firstName}
-                sx={{
-                  backgroundColor: neutralLight,
-                  width: "150px",
-                  borderRadius: "0.25rem",
-                  p: "0.25rem 1rem",
-                  "& .MuiSvgIcon-root": {
-                    pr: "0.25rem",
-                    width: "3rem",
-                  },
-                  "& .MuiSelect-select:focus": {
-                    backgroundColor: neutralLight,
-                  },
-                }}
-                input={<InputBase />}
-              >
-                <MenuItem value={firstName}>
-                  <Typography>{firstName}</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  Log Out
-                </MenuItem>
-              </Select>
-            </FormControl>
+            {isAuth ? (
+              <>
+                <Person sx={{ fontSize: "25px" }} />
+                <ShoppingCart sx={{ fontSize: "25px" }} />
+                <Favorite sx={{ fontSize: "25px" }} />
+                <RequestPage sx={{ fontSize: "25px" }} />
+                <Settings sx={{ fontSize: "25px" }} />
+                <FormControl variant="standard" value={firstName}>
+                  <Select
+                    value={firstName}
+                    sx={{
+                      backgroundColor: neutralLight,
+                      width: "150px",
+                      borderRadius: "0.25rem",
+                      p: "0.25rem 1rem",
+                      "& .MuiSvgIcon-root": {
+                        pr: "0.25rem",
+                        width: "3rem",
+                      },
+                      "& .MuiSelect-select:focus": {
+                        backgroundColor: neutralLight,
+                      },
+                    }}
+                    input={<InputBase />}
+                  >
+                    <MenuItem value={firstName}>
+                      <Typography>{firstName}</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => dispatch(setLogout())}>
+                      Log Out
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </>
+            ) : (
+              <Button onClick={() => navigate("/login")} sx={{ fontSize: "15px" }}>
+                Login/Register
+              </Button>
+            )}
           </FlexBetween>
         </Box>
       )}
