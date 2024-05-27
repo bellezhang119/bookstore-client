@@ -28,14 +28,9 @@ const ProductWidget = ({ product }) => {
   const token = useSelector((state) => state.token);
   const isAuth = Boolean(useSelector((state) => state.token));
 
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
-
-  const cartButtonTextDesktop = "Add To Cart";
-  const cartButtonTextMobile = "Cart";
-  const wishlistButtonTextDesktop = "Add To Wishlist";
-  const wishlistButtonTextMobile = "Wishlist";
 
   const addToCartDB = async () => {
     if (!isAuth) {
@@ -104,56 +99,102 @@ const ProductWidget = ({ product }) => {
           <Typography variant="body2" color="textSecondary">
             Author: {product?.authorNames.join(", ")}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" color="textSecondary" paragraph>
             Category: {product?.categoryList.join(", ")}
           </Typography>
-          <Typography variant="body1" paragraph>
-            {product?.description}
-          </Typography>
-          <Typography variant="h4" paragraph>
+          {isMobile ? (
+            ""
+          ) : (
+            <Typography variant="body1" paragraph>
+              {product?.description}
+            </Typography>
+          )}
+          <Typography variant="h4" fontWeight="500" paragraph>
             ${product?.productPrice}
           </Typography>
           <FlexBetween gap="1rem">
-            <Box
-              color="main"
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button
-                variant="outlined"
-                startIcon={<AddShoppingCart />}
-                onClick={addToCartDB}
-                sx={{
-                  backgroundColor: primary,
-                  color: palette.background.alt,
-                  "&:hover": {
-                    backgroundColor: palette.background.alt,
-                    color: primary,
-                  },
-                }}
+            {isMobile ? (
+              <Box>
+                <Box
+                  display="flex"
+                  justifyContent="flex-start"
+                  marginTop="0.5rem"
+                >
+                  <Button
+                    variant="outlined"
+                    startIcon={<AddShoppingCart />}
+                    onClick={addToCartDB}
+                    sx={{
+                      marginBottom: "0.3rem",
+                      backgroundColor: primary,
+                      color: palette.background.alt,
+                      fontSize: isMobile ? "10px" : "14px",
+                      "&:hover": {
+                        backgroundColor: palette.background.alt,
+                        color: primary,
+                      },
+                    }}
+                  >
+                    Cart
+                  </Button>
+                </Box>
+                <Box color="main">
+                  <Button
+                    variant="outlined"
+                    startIcon={<FavoriteBorder />}
+                    onClick={addToWishlistDB}
+                    sx={{
+                      color: primary,
+                      backgroundColor: palette.background.alt,
+                      fontSize: isMobile ? "10px" : "14px",
+                      "&:hover": {
+                        backgroundColor: primary,
+                        color: palette.background.alt,
+                      },
+                    }}
+                  >
+                    Wishlist
+                  </Button>
+                </Box>
+              </Box>
+            ) : (
+              <Box
+                color="main"
+                sx={{ display: "flex", justifyContent: "flex-end" }}
               >
-                {isNonMobileScreens
-                  ? cartButtonTextDesktop
-                  : cartButtonTextMobile}
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<FavoriteBorder />}
-                onClick={addToWishlistDB}
-                sx={{
-                  color: primary,
-                  backgroundColor: palette.background.alt,
-                  marginLeft: "10px",
-                  "&:hover": {
+                <Button
+                  variant="outlined"
+                  startIcon={<AddShoppingCart />}
+                  onClick={addToCartDB}
+                  sx={{
                     backgroundColor: primary,
                     color: palette.background.alt,
-                  },
-                }}
-              >
-                {isNonMobileScreens
-                  ? wishlistButtonTextDesktop
-                  : wishlistButtonTextMobile}
-              </Button>
-            </Box>
+                    "&:hover": {
+                      backgroundColor: palette.background.alt,
+                      color: primary,
+                    },
+                  }}
+                >
+                  Add To Cart
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<FavoriteBorder />}
+                  onClick={addToWishlistDB}
+                  sx={{
+                    color: primary,
+                    backgroundColor: palette.background.alt,
+                    marginLeft: "10px",
+                    "&:hover": {
+                      backgroundColor: primary,
+                      color: palette.background.alt,
+                    },
+                  }}
+                >
+                  Add To Wishlist
+                </Button>
+              </Box>
+            )}
           </FlexBetween>
         </Box>
       </FlexBetween>

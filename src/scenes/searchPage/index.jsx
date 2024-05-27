@@ -1,4 +1,4 @@
-import { Box, IconButton, useMediaQuery, Container, Grid } from "@mui/material";
+import { Box, useMediaQuery, Container, Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
@@ -12,10 +12,10 @@ const SearchPage = () => {
   const query = params.get("query");
   const location = useLocation();
   const [searchResults, setSearchResults] = useState([]);
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("");
+
+  const isMobile = useMediaQuery("(max-width: 900px)");
 
   const handleApplyFilters = (newFilters) => {
     setFilters(newFilters);
@@ -77,20 +77,31 @@ const SearchPage = () => {
     <Box>
       <Navbar />
       <Box
-        sx={{ paddingTop: "96px", display: "flex", justifyContent: "center" }}
+        sx={{ paddingTop: "96px", display: "flex", justifyContent: "center", paddingLeft: '16px', paddingRight: '16px' }}
       >
-        <Grid container spacing={3} sx={{ maxWidth: "1200px" }}>
-          <Grid item xs={12} md={3}>
-            <Box sx={{ position: "sticky", top: "96px" }}>
-              <FilterSortWidget
-                categories={categories}
-                onFilterChange={handleApplyFilters}
-                onSortChange={handleSortChange}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={9}>
+        <Grid container spacing={3} sx={{ maxWidth: "1000px" }}>
+          {!isMobile && (
+            <Grid item xs={12} md={3}>
+              <Box sx={{ position: "sticky", top: "96px" }}>
+                <FilterSortWidget
+                  categories={categories}
+                  onFilterChange={handleApplyFilters}
+                  onSortChange={handleSortChange}
+                />
+              </Box>
+            </Grid>
+          )}
+          <Grid item xs={12} md={isMobile ? 12 : 9}>
             <Box>
+              {isMobile && (
+                <Box sx={{ position: "sticky", top: "94px", zIndex: 1, marginBottom: "1rem"}}>
+                  <FilterSortWidget
+                    categories={categories}
+                    onFilterChange={handleApplyFilters}
+                    onSortChange={handleSortChange}
+                  />
+                </Box>
+              )}
               {searchResults.map((product) => (
                 <ProductWidget key={product._id} product={product} />
               ))}

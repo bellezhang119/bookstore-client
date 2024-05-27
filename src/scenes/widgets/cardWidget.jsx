@@ -100,6 +100,20 @@ const CardWidget = ({ product }) => {
           {product.productName}
         </Typography>
         <Typography
+          variant="h4"
+          color="main"
+          marginBottom="0.5rem"
+          sx={{
+            fontSize: isMobile ? "10px" : "14px",
+            fontWeight: "600",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          ${product.productPrice}
+        </Typography>
+        <Typography
           variant="body2"
           color="textSecondary"
           sx={{
