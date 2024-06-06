@@ -77,7 +77,13 @@ const SearchPage = () => {
     <Box>
       <Navbar />
       <Box
-        sx={{ paddingTop: "96px", display: "flex", justifyContent: "center", paddingLeft: '16px', paddingRight: '16px' }}
+        sx={{
+          paddingTop: "96px",
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+        }}
       >
         <Grid container spacing={3} sx={{ maxWidth: "1000px" }}>
           {!isMobile && (
@@ -94,7 +100,14 @@ const SearchPage = () => {
           <Grid item xs={12} md={isMobile ? 12 : 9}>
             <Box>
               {isMobile && (
-                <Box sx={{ position: "sticky", top: "94px", zIndex: 1, marginBottom: "1rem"}}>
+                <Box
+                  sx={{
+                    position: "sticky",
+                    top: "94px",
+                    zIndex: 1,
+                    marginBottom: "1rem",
+                  }}
+                >
                   <FilterSortWidget
                     categories={categories}
                     onFilterChange={handleApplyFilters}
@@ -103,7 +116,13 @@ const SearchPage = () => {
                 </Box>
               )}
               {searchResults.map((product) => (
-                <ProductWidget key={product._id} product={product} />
+                <Box marginBottom="1rem" key={product._id}>
+                  <ProductWidget
+                    margin="1rem"
+                    key={product._id}
+                    product={product}
+                  />
+                </Box>
               ))}
             </Box>
           </Grid>

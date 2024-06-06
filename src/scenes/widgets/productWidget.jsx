@@ -12,8 +12,8 @@ import ProductImage from "components/ProductImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { addToCart, addToWishlist } from "state";
+import { useNavigate, Link } from "react-router-dom";
+import { useCartWishlist } from "utils/cartWishlist.js";
 
 const ProductWidget = ({ product }) => {
   const dispatch = useDispatch();
@@ -28,69 +28,30 @@ const ProductWidget = ({ product }) => {
   const token = useSelector((state) => state.token);
   const isAuth = Boolean(useSelector((state) => state.token));
 
+  const { addToCartDB, addToWishlistDB } = useCartWishlist();
+
   const isMobile = useMediaQuery("(max-width: 500px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
-  const addToCartDB = async () => {
-    if (!isAuth) {
-      navigate("/login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/cart/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToCart(product._id));
-        console.log("Item added to cart");
-      } else {
-        console.error("Failed to add item to cart");
-      }
-    }
-  };
-
-  const addToWishlistDB = async () => {
-    if (!isAuth) {
-      navigate("login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/wishlist/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToWishlist(product._id));
-        console.log("Item added to wishlist");
-      } else {
-        console.error("Failed to add item to wishlist");
-      }
-    }
-  };
-
   return (
-    <WidgetWrapper marginBottom="0.5rem">
+    <WidgetWrapper>
       <FlexBetween gap="1.5rem">
         <Box>
           <ProductImage
-            image={product.picturePath}
+            image={product?.picturePath}
             width="150px"
             height="230px"
           />
         </Box>
         <Box>
           <Typography variant="h3" color="main" marginBottom="1rem">
-            {product?.productName}
+            <Link
+              style={{ textDecoration: "none", color: "inherit" }}
+              to={`/product/${product._id}`}
+            >
+              {product?.productName}
+            </Link>
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Publish Date:{" "}

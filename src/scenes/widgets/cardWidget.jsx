@@ -12,8 +12,8 @@ import ProductImage from "components/ProductImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { addToCart, addToWishlist } from "state";
+import { useNavigate, Link } from "react-router-dom";
+import { useCartWishlist } from "utils/cartWishlist.js";
 
 const CardWidget = ({ product }) => {
   const dispatch = useDispatch();
@@ -25,58 +25,14 @@ const CardWidget = ({ product }) => {
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
+  const { addToCartDB, addToWishlistDB } = useCartWishlist();
+
   const user = useSelector((state) => state.user);
   const _id = user ? user._id : null;
   const token = useSelector((state) => state.token);
   const isAuth = Boolean(useSelector((state) => state.token));
 
   const isMobile = useMediaQuery("(max-width: 500px)");
-
-  const addToCartDB = async () => {
-    if (!isAuth) {
-      navigate("/login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/cart/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToCart(product._id));
-        console.log("Item added to cart");
-      } else {
-        console.error("Failed to add item to cart");
-      }
-    }
-  };
-
-  const addToWishlistDB = async () => {
-    if (!isAuth) {
-      navigate("login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/wishlist/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToWishlist(product._id));
-        console.log("Item added to wishlist");
-      } else {
-        console.error("Failed to add item to wishlist");
-      }
-    }
-  };
 
   return (
     <WidgetWrapper maxWidth={isMobile ? "150px" : "200px"}>
@@ -97,7 +53,12 @@ const CardWidget = ({ product }) => {
             whiteSpace: "nowrap",
           }}
         >
-          {product.productName}
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to={`/product/${product._id}`}
+          >
+            {product.productName}
+          </Link>
         </Typography>
         <Typography
           variant="h4"

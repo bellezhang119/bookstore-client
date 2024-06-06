@@ -82,8 +82,8 @@ const HomePage = () => {
             {productList
               .slice(startIndex, startIndex + cardDisplayed)
               .map((item) => (
-                <Box key={item.id} marginX="3px" >
-                  <CardWidget key={item.id} product={item} />
+                <Box key={item._id} marginX="3px" >
+                  <CardWidget key={item._id} product={item} />
                 </Box>
               ))}
           </Box>
