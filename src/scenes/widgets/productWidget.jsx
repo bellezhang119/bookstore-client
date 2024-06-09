@@ -13,7 +13,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { useCartWishlist } from "utils/cartWishlist.js";
+import { useCartWishlist } from "hooks/useCartWishlist.js";
 
 const ProductWidget = ({ product }) => {
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ const ProductWidget = ({ product }) => {
                   <Button
                     variant="outlined"
                     startIcon={<AddShoppingCart />}
-                    onClick={addToCartDB}
+                    onClick={() => addToCart(product)}
                     sx={{
                       marginBottom: "0.3rem",
                       backgroundColor: primary,
@@ -103,7 +103,7 @@ const ProductWidget = ({ product }) => {
                   <Button
                     variant="outlined"
                     startIcon={<FavoriteBorder />}
-                    onClick={addToWishlistDB}
+                    onClick={() => addToWishlist(product)}
                     sx={{
                       color: primary,
                       backgroundColor: palette.background.alt,
@@ -126,7 +126,7 @@ const ProductWidget = ({ product }) => {
                 <Button
                   variant="outlined"
                   startIcon={<AddShoppingCart />}
-                  onClick={addToCartDB}
+                  onClick={() => addToCart(product)}
                   sx={{
                     backgroundColor: primary,
                     color: palette.background.alt,
@@ -141,7 +141,7 @@ const ProductWidget = ({ product }) => {
                 <Button
                   variant="outlined"
                   startIcon={<FavoriteBorder />}
-                  onClick={addToWishlistDB}
+                  onClick={() => addToWishlist(product)}
                   sx={{
                     color: primary,
                     backgroundColor: palette.background.alt,

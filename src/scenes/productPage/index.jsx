@@ -13,7 +13,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addToCart, addToWishlist } from "state";
+import { useCartWishlist } from "hooks/useCartWishlist.js";
 import Navbar from "scenes/navbar";
 
 const ProductPage = () => {
@@ -23,6 +23,7 @@ const ProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { addToCart, addToWishlist } = useCartWishlist();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -45,52 +46,6 @@ const ProductPage = () => {
 
     fetchProduct();
   }, [productId]);
-
-  const addToCartDB = async () => {
-    if (!isAuth) {
-      navigate("/login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/cart/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToCart(product._id));
-        console.log("Item added to cart");
-      } else {
-        console.error("Failed to add item to cart");
-      }
-    }
-  };
-
-  const addToWishlistDB = async () => {
-    if (!isAuth) {
-      navigate("login");
-    } else if (product) {
-      const response = await fetch(
-        `http://localhost:3001/api/users/${_id}/wishlist/add/${product._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        dispatch(addToWishlist(product._id));
-        console.log("Item added to wishlist");
-      } else {
-        console.error("Failed to add item to wishlist");
-      }
-    }
-  };
 
   return (
     <Box>
@@ -158,7 +113,7 @@ const ProductPage = () => {
                       <Button
                         variant="outlined"
                         startIcon={<AddShoppingCart />}
-                        onClick={addToCartDB}
+                        onClick={() => addToCart(product)}
                         sx={{
                           marginBottom: "0.3rem",
                           backgroundColor: primary,
@@ -177,7 +132,7 @@ const ProductPage = () => {
                       <Button
                         variant="outlined"
                         startIcon={<FavoriteBorder />}
-                        onClick={addToWishlistDB}
+                        onClick={() => addToWishlist(product)}
                         sx={{
                           color: primary,
                           backgroundColor: palette.background.alt,
@@ -200,7 +155,7 @@ const ProductPage = () => {
                     <Button
                       variant="outlined"
                       startIcon={<AddShoppingCart />}
-                      onClick={addToCartDB}
+                      onClick={() => addToCart(product)}
                       sx={{
                         backgroundColor: primary,
                         color: palette.background.alt,
@@ -215,7 +170,7 @@ const ProductPage = () => {
                     <Button
                       variant="outlined"
                       startIcon={<FavoriteBorder />}
-                      onClick={addToWishlistDB}
+                      onClick={() => addToWishlist(product)}
                       sx={{
                         color: primary,
                         backgroundColor: palette.background.alt,

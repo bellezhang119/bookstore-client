@@ -9,14 +9,14 @@ import {
   deleteFromWishlistState,
 } from "state";
 
-const dispatch = useDispatch();
-const navigate = useNavigate();
-const token = useSelector((state) => state.token);
-const user = useSelector((state) => state.user);
-const _id = user ? user._id : null;
-const isAuth = Boolean(token);
-
 export const useCartWishlist = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.token);
+  const user = useSelector((state) => state.user);
+  const _id = user ? user._id : null;
+  const isAuth = Boolean(token);
+
   const addToCart = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -32,7 +32,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(addToCartState(product._id));
+        dispatch(addToCartState({productId: product._id}));
         console.log("Item added to cart");
       } else {
         console.error("Failed to add item to cart");
@@ -55,7 +55,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(addToWishlistState(product._id));
+        dispatch(addToWishlistState({productId: product._id}));
         console.log("Item added to wishlist");
       } else {
         console.error("Failed to add item to wishlist");
@@ -78,7 +78,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(removeFromCartState(product._id));
+        dispatch(removeFromCartState({productId: product._id}));
         console.log("Item removed from cart");
       } else {
         console.error("Failed to remove item from cart");
@@ -101,7 +101,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(removeFromWishlistState(product._id));
+        dispatch(removeFromWishlistState({productId: product._id}));
         console.log("Item removed from wishlist");
       } else {
         console.error("Failed to remove item from wishlist");
@@ -124,7 +124,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(deleteFromCartState(product._id));
+        dispatch(deleteFromCartState({productId: product._id}));
         console.log("Item deleted from cart");
       } else {
         console.error("Failed to delete item from cart");
@@ -147,7 +147,7 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(deleteFromWishlistState(product._id));
+        dispatch(deleteFromWishlistState({productId: product._id}));
         console.log("Item deleted from wishlist");
       } else {
         console.error("Failed to delete item from wishlist");
