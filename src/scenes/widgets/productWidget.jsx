@@ -28,7 +28,7 @@ const ProductWidget = ({ product }) => {
   const token = useSelector((state) => state.token);
   const isAuth = Boolean(useSelector((state) => state.token));
 
-  const { addToCartDB, addToWishlistDB } = useCartWishlist();
+  const { addToCart, addToWishlist } = useCartWishlist();
 
   const isMobile = useMediaQuery("(max-width: 500px)");
   const mediumMain = palette.neutral.mediumMain;

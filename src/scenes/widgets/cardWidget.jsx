@@ -25,7 +25,7 @@ const CardWidget = ({ product }) => {
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
-  const { addToCartDB, addToWishlistDB } = useCartWishlist();
+  const { addToCart, addToWishlist } = useCartWishlist();
 
   const user = useSelector((state) => state.user);
   const _id = user ? user._id : null;

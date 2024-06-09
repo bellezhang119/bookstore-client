@@ -24,13 +24,13 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-    setOrders: (state, action) => {
+    setOrderState: (state, action) => {
       state.orders = action.payload.orders;
     },
-    setCart: (state, action) => {
+    setCartState: (state, action) => {
       state.cart = action.payload.cart;
     },
-    addToCart: (state, action) => {
+    addToCartState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.cart.findIndex(
         (item) => item.productId === productId
@@ -42,7 +42,7 @@ export const authSlice = createSlice({
         state.cart.push({ productId, quantity: 1 });
       }
     },
-    removeFromCart: (state, action) => {
+    removeFromCartState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.cart.findIndex(
         (item) => item.productId === productId
@@ -56,7 +56,7 @@ export const authSlice = createSlice({
         }
       }
     },
-    deleteFromCart: (state, action) => {
+    deleteFromCartState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.cart.findIndex(
         (item) => item.productId === productId
@@ -66,10 +66,10 @@ export const authSlice = createSlice({
         state.cart.splice(existingItemIndex, 1);
       }
     },
-    setWishlist: (state, action) => {
+    setWishlistState: (state, action) => {
       state.wishlist = action.payload.wishlist;
     },
-    addToWishlist: (state, action) => {
+    addToWishlistState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.wishlist.findIndex(
         (item) => item.productId === productId
@@ -81,7 +81,7 @@ export const authSlice = createSlice({
         state.wishlist.push({ productId, quantity: 1 });
       }
     },
-    removeFromWishlis: (state, action) => {
+    removeFromWishlistState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.wishlist.findIndex(
         (item) => item.productId === productId
@@ -95,7 +95,7 @@ export const authSlice = createSlice({
         }
       }
     },
-    deleteFromWishlis: (state, action) => {
+    deleteFromWishlistState: (state, action) => {
       const { productId } = action.payload;
       const existingItemIndex = state.wishlist.findIndex(
         (item) => item.productId === productId
@@ -113,13 +113,13 @@ export const {
   setLogin,
   setLogout,
   setOrders,
-  setCart,
-  addToCart,
-  removeFromCart,
-  deleteFromCart,
-  setWishlist,
-  addToWishlist,
-  removeFromWishlist,
-  deleteFromWishlist,
+  setCartState,
+  addToCartState,
+  removeFromCartState,
+  deleteFromCartState,
+  setWishlistState,
+  addToWishlistState,
+  removeFromWishlistState,
+  deleteFromWishlistState,
 } = authSlice.actions;
 export default authSlice.reducer;
