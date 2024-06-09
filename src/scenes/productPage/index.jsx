@@ -66,88 +66,32 @@ const ProductPage = () => {
               <Box>
                 <ProductImage
                   image={product?.picturePath}
-                  width="150px"
-                  height="230px"
-                />
-              </Box>
-            ) : (
-              <Box>
-                <ProductImage
-                  image={product?.picturePath}
                   width="240px"
                   height="360px"
-                />{" "}
-              </Box>
-            )}
-
-            <Box>
-              <Typography variant="h3" color="main" marginBottom="1rem">
-                {product?.productName}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Publish Date:{" "}
-                {product
-                  ? new Date(product.publishDate).toLocaleDateString()
-                  : ""}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Author: {product?.authorNames.join(", ")}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
-                Category: {product?.categoryList.join(", ")}
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {product?.description}
-              </Typography>
-              <Typography variant="h4" fontWeight="500" paragraph>
-                ${product?.productPrice}
-              </Typography>
-              <FlexBetween gap="1rem">
-                {isMobile ? (
-                  <Box>
-                    <Box
-                      display="flex"
-                      justifyContent="flex-start"
-                      marginTop="0.5rem"
-                    >
-                      <Button
-                        variant="outlined"
-                        startIcon={<AddShoppingCart />}
-                        onClick={() => addToCart(product)}
-                        sx={{
-                          marginBottom: "0.3rem",
-                          backgroundColor: primary,
-                          color: palette.background.alt,
-                          fontSize: isMobile ? "10px" : "14px",
-                          "&:hover": {
-                            backgroundColor: palette.background.alt,
-                            color: primary,
-                          },
-                        }}
-                      >
-                        Cart
-                      </Button>
-                    </Box>
-                    <Box color="main">
-                      <Button
-                        variant="outlined"
-                        startIcon={<FavoriteBorder />}
-                        onClick={() => addToWishlist(product)}
-                        sx={{
-                          color: primary,
-                          backgroundColor: palette.background.alt,
-                          fontSize: isMobile ? "10px" : "14px",
-                          "&:hover": {
-                            backgroundColor: primary,
-                            color: palette.background.alt,
-                          },
-                        }}
-                      >
-                        Wishlist
-                      </Button>
-                    </Box>
-                  </Box>
-                ) : (
+                  display="block"
+                />
+                <Typography variant="h3" color="main" marginBottom="1rem">
+                  {product?.productName}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Publish Date:{" "}
+                  {product
+                    ? new Date(product.publishDate).toLocaleDateString()
+                    : ""}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Author: {product?.authorNames.join(", ")}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" paragraph>
+                  Category: {product?.categoryList.join(", ")}
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  {product?.description}
+                </Typography>
+                <Typography variant="h4" fontWeight="500" paragraph>
+                  ${product?.productPrice}
+                </Typography>
+                <FlexBetween gap="1rem">
                   <Box
                     color="main"
                     sx={{ display: "flex", justifyContent: "flex-end" }}
@@ -184,9 +128,80 @@ const ProductPage = () => {
                       Add To Wishlist
                     </Button>
                   </Box>
-                )}
-              </FlexBetween>
-            </Box>
+                </FlexBetween>
+              </Box>
+            ) : (
+              <>
+                <Box>
+                  <ProductImage
+                    image={product?.picturePath}
+                    width="240px"
+                    height="360px"
+                  />{" "}
+                </Box>
+                <Box>
+                  <Typography variant="h3" color="main" marginBottom="1rem">
+                    {product?.productName}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Publish Date:{" "}
+                    {product
+                      ? new Date(product.publishDate).toLocaleDateString()
+                      : ""}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Author: {product?.authorNames.join(", ")}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" paragraph>
+                    Category: {product?.categoryList.join(", ")}
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {product?.description}
+                  </Typography>
+                  <Typography variant="h4" fontWeight="500" paragraph>
+                    ${product?.productPrice}
+                  </Typography>
+                  <FlexBetween gap="1rem">
+                    <Box
+                      color="main"
+                      sx={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <Button
+                        variant="outlined"
+                        startIcon={<AddShoppingCart />}
+                        onClick={() => addToCart(product)}
+                        sx={{
+                          backgroundColor: primary,
+                          color: palette.background.alt,
+                          "&:hover": {
+                            backgroundColor: palette.background.alt,
+                            color: primary,
+                          },
+                        }}
+                      >
+                        Add To Cart
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        startIcon={<FavoriteBorder />}
+                        onClick={() => addToWishlist(product)}
+                        sx={{
+                          color: primary,
+                          backgroundColor: palette.background.alt,
+                          marginLeft: "10px",
+                          "&:hover": {
+                            backgroundColor: primary,
+                            color: palette.background.alt,
+                          },
+                        }}
+                      >
+                        Add To Wishlist
+                      </Button>
+                    </Box>
+                  </FlexBetween>
+                </Box>
+              </>
+            )}
           </FlexBetween>
         </WidgetWrapper>
       </Box>

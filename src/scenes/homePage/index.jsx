@@ -5,9 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "scenes/navbar";
 import ProductWidget from "scenes/widgets/productWidget";
 import CardWidget from "scenes/widgets/cardWidget";
+import useWindowWidth from "hooks/useWindowWidth.js";
 
 const HomePage = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const windowWidth = useWindowWidth();
   const [productList, setProductList] = useState([]);
   const [featuredProduct, setFeaturedProduct] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
@@ -19,8 +20,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    setCardDisplayed(isNonMobileScreens ? 4 : 2);
-  }, [isNonMobileScreens]);
+    if (windowWidth) {
+      setCardDisplayed(Math.floor(windowWidth / 230));
+    }
+  }, [windowWidth]);
 
   const getProducts = async () => {
     const response = await fetch(`http://localhost:3001/api/products/`, {
@@ -54,19 +57,12 @@ const HomePage = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          paddingTop: '80px'
+          paddingTop: "80px",
         }}
-        
       >
-        {isNonMobileScreens ? (
-          <Box margin="1rem" maxWidth="60%">
-            {featuredProduct && <ProductWidget product={featuredProduct} />}
-          </Box>
-        ) : (
-          <Box margin="1rem" maxWidth="90%">
-            {featuredProduct && <ProductWidget product={featuredProduct} />}
-          </Box>
-        )}
+        <Box margin="1rem" maxWidth="90%">
+          {featuredProduct && <ProductWidget product={featuredProduct} />}
+        </Box>
 
         <Box display="flex" alignItems="center">
           <IconButton onClick={handlePrevClick} disabled={isPrevDisabled}>
@@ -82,7 +78,7 @@ const HomePage = () => {
             {productList
               .slice(startIndex, startIndex + cardDisplayed)
               .map((item) => (
-                <Box key={item._id} marginX="3px" >
+                <Box key={item._id} marginX="3px">
                   <CardWidget key={item._id} product={item} />
                 </Box>
               ))}
