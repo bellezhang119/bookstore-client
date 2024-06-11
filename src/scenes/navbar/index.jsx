@@ -25,7 +25,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
 const Navbar = () => {
@@ -35,10 +35,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isAuth = Boolean(useSelector((state) => state.token));
   const user = useSelector((state) => state.user);
+  const _id = user ? user._id : null;
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const theme = useTheme();
-  const neutralLight = theme.palette.neutral.light;
+  const neutral = theme.palette.neutral;
   const dark = theme.palette.neutral.dark;
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
@@ -61,9 +62,9 @@ const Navbar = () => {
       padding="1rem 6%"
       backgroundColor={alt}
       sx={{
-        position: 'fixed',
+        position: "fixed",
         top: 0,
-        width: '100%',
+        width: "100%",
         zIndex: 1000,
       }}
     >
@@ -83,7 +84,7 @@ const Navbar = () => {
           Bookstore
         </Typography>
         <FlexBetween
-          backgroundColor={neutralLight}
+          backgroundColor={neutral.light}
           borderRadius="9px"
           padding="0.1rem 1rem 0.1rem 1rem"
           marginRight="1.5rem"
@@ -107,7 +108,14 @@ const Navbar = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
-          <IconButton onClick={() => dispatch(setMode())}>
+          <IconButton
+            sx={{
+              "&:hover": {
+                backgroundColor: "transparent",
+              },
+            }}
+            onClick={() => dispatch(setMode())}
+          >
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
@@ -117,7 +125,19 @@ const Navbar = () => {
           {isAuth ? (
             <>
               <Person sx={{ fontSize: "25px" }} />
-              <ShoppingCart sx={{ fontSize: "25px" }} />
+              <IconButton
+                sx={{
+                  color: neutral.dark,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: neutral.medium,
+                  },
+                }}
+                onClick={() => navigate(`/cart/${_id}`)}
+              >
+                <ShoppingCart sx={{ fontSize: "25px" }} />
+              </IconButton>
+
               <Favorite sx={{ fontSize: "25px" }} />
               <RequestPage sx={{ fontSize: "25px" }} />
               <Settings sx={{ fontSize: "25px" }} />
@@ -125,7 +145,7 @@ const Navbar = () => {
                 <Select
                   value={firstName}
                   sx={{
-                    backgroundColor: neutralLight,
+                    backgroundColor: neutral.light,
                     width: "150px",
                     borderRadius: "0.25rem",
                     p: "0.25rem 1rem",
@@ -134,7 +154,7 @@ const Navbar = () => {
                       width: "3rem",
                     },
                     "& .MuiSelect-select:focus": {
-                      backgroundColor: neutralLight,
+                      backgroundColor: neutral.light,
                     },
                   }}
                   input={<InputBase />}
@@ -142,18 +162,25 @@ const Navbar = () => {
                   <MenuItem value={firstName}>
                     <Typography>{firstName}</Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+                  <MenuItem onClick={() => dispatch(setLogout())}>
+                    Log Out
+                  </MenuItem>
                 </Select>
               </FormControl>
             </>
           ) : (
-            <Button onClick={() => navigate("/login")} sx={{ fontSize: "20px" }}>
+            <Button
+              onClick={() => navigate("/login")}
+              sx={{ fontSize: "20px" }}
+            >
               Login/Register
             </Button>
           )}
         </FlexBetween>
       ) : (
-        <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+        <IconButton
+          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+        >
           <Menu />
         </IconButton>
       )}
@@ -172,7 +199,9 @@ const Navbar = () => {
         >
           {/* CLOSE ICON */}
           <Box display="flex" justifyContent="flex-end" p="1rem">
-            <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+            <IconButton
+              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+            >
               <Close />
             </IconButton>
           </Box>
@@ -185,7 +214,14 @@ const Navbar = () => {
             alignItems="center"
             gap="3rem"
           >
-            <IconButton onClick={() => dispatch(setMode())} sx={{ fontSize: "25px" }}>
+            <IconButton
+              onClick={() => dispatch(setMode())}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
               {theme.palette.mode === "dark" ? (
                 <DarkMode sx={{ fontSize: "25px" }} />
               ) : (
@@ -195,7 +231,19 @@ const Navbar = () => {
             {isAuth ? (
               <>
                 <Person sx={{ fontSize: "25px" }} />
-                <ShoppingCart sx={{ fontSize: "25px" }} />
+                <IconButton
+                  sx={{
+                    color: neutral.dark,
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: neutral.medium,
+                    },
+                  }}
+                  onClick={() => navigate(`/cart/${_id}`)}
+                >
+                  <ShoppingCart sx={{ fontSize: "25px" }} />
+                </IconButton>
+
                 <Favorite sx={{ fontSize: "25px" }} />
                 <RequestPage sx={{ fontSize: "25px" }} />
                 <Settings sx={{ fontSize: "25px" }} />
@@ -203,7 +251,7 @@ const Navbar = () => {
                   <Select
                     value={firstName}
                     sx={{
-                      backgroundColor: neutralLight,
+                      backgroundColor: neutral.light,
                       width: "150px",
                       borderRadius: "0.25rem",
                       p: "0.25rem 1rem",
@@ -212,7 +260,7 @@ const Navbar = () => {
                         width: "3rem",
                       },
                       "& .MuiSelect-select:focus": {
-                        backgroundColor: neutralLight,
+                        backgroundColor: neutral.light,
                       },
                     }}
                     input={<InputBase />}
@@ -227,7 +275,10 @@ const Navbar = () => {
                 </FormControl>
               </>
             ) : (
-              <Button onClick={() => navigate("/login")} sx={{ fontSize: "15px" }}>
+              <Button
+                onClick={() => navigate("/login")}
+                sx={{ fontSize: "15px" }}
+              >
                 Login/Register
               </Button>
             )}

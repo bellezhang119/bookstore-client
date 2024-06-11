@@ -32,7 +32,7 @@ const HomePage = () => {
 
     const products = await response.json();
     setFeaturedProduct(products[1]);
-    setProductList(products.slice(0, 12));
+    setProductList(products.slice(0, 15));
   };
 
   const handleNextClick = () => {

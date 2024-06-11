@@ -4,6 +4,7 @@ import LoginPage from "./scenes/loginPage";
 import UserPage from "./scenes/userPage";
 import SearchPage from "./scenes/searchPage";
 import ProductPage from "./scenes/productPage";
+import CartPage from "./scenes/cartPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -26,6 +27,7 @@ function App() {
             <Route path="/profile/:userId" element={<UserPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/cart/:userId" element={<CartPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -12,7 +12,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state";
+import { setLogin, setCartState, setWishlistState, setOrders } from "state";
 import FlexBetween from "components/FlexBetween";
 
 const currentDate = new Date().toISOString().substr(0, 10);

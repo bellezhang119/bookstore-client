@@ -57,7 +57,7 @@ const CardWidget = ({ product }) => {
             style={{ textDecoration: "none", color: "inherit" }}
             to={`/product/${product._id}`}
           >
-            {product.productName}
+            {product?.productName}
           </Link>
         </Typography>
         <Typography

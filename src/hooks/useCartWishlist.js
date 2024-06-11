@@ -32,10 +32,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(addToCartState({productId: product._id}));
+        //dispatch(addToCartState({productId: product._id}));
         console.log("Item added to cart");
+        return true;
       } else {
         console.error("Failed to add item to cart");
+        return false;
       }
     }
   };
@@ -55,10 +57,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(addToWishlistState({productId: product._id}));
+        //dispatch(addToWishlistState({productId: product._id}));
         console.log("Item added to wishlist");
+        return true;
       } else {
         console.error("Failed to add item to wishlist");
+        return false;
       }
     }
   };
@@ -78,10 +82,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(removeFromCartState({productId: product._id}));
+        //dispatch(removeFromCartState({productId: product._id}));
         console.log("Item removed from cart");
+        return true;
       } else {
         console.error("Failed to remove item from cart");
+        return false;
       }
     }
   };
@@ -101,10 +107,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(removeFromWishlistState({productId: product._id}));
+        //dispatch(removeFromWishlistState({productId: product._id}));
         console.log("Item removed from wishlist");
+        return true;
       } else {
         console.error("Failed to remove item from wishlist");
+        return false;
       }
     }
   };
@@ -124,10 +132,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(deleteFromCartState({productId: product._id}));
+        //dispatch(deleteFromCartState({productId: product._id}));
         console.log("Item deleted from cart");
+        return true;
       } else {
         console.error("Failed to delete item from cart");
+        return false;
       }
     }
   };
@@ -147,10 +157,12 @@ export const useCartWishlist = () => {
       );
 
       if (response.ok) {
-        dispatch(deleteFromWishlistState({productId: product._id}));
+        //dispatch(deleteFromWishlistState({productId: product._id}));
         console.log("Item deleted from wishlist");
+        return true;
       } else {
         console.error("Failed to delete item from wishlist");
+        return false;
       }
     }
   };

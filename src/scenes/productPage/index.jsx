@@ -30,11 +30,6 @@ const ProductPage = () => {
 
   const isMobile = useMediaQuery("(max-width: 500px)");
 
-  const user = useSelector((state) => state.user);
-  const _id = user ? user._id : null;
-  const token = useSelector((state) => state.token);
-  const isAuth = Boolean(useSelector((state) => state.token));
-
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await fetch(
