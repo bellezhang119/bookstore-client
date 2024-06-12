@@ -137,8 +137,19 @@ const Navbar = () => {
               >
                 <ShoppingCart sx={{ fontSize: "25px" }} />
               </IconButton>
+              <IconButton
+                sx={{
+                  color: neutral.dark,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: neutral.medium,
+                  },
+                }}
+                onClick={() => navigate(`/wishlist/${_id}`)}
+              >
+                <Favorite sx={{ fontSize: "25px" }} />
+              </IconButton>
 
-              <Favorite sx={{ fontSize: "25px" }} />
               <RequestPage sx={{ fontSize: "25px" }} />
               <Settings sx={{ fontSize: "25px" }} />
               <FormControl variant="standard" value={firstName}>
@@ -244,7 +255,18 @@ const Navbar = () => {
                   <ShoppingCart sx={{ fontSize: "25px" }} />
                 </IconButton>
 
-                <Favorite sx={{ fontSize: "25px" }} />
+                <IconButton
+                  sx={{
+                    color: neutral.dark,
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: neutral.medium,
+                    },
+                  }}
+                  onClick={() => navigate(`/wishlist/${_id}`)}
+                >
+                  <Favorite sx={{ fontSize: "25px" }} />
+                </IconButton>
                 <RequestPage sx={{ fontSize: "25px" }} />
                 <Settings sx={{ fontSize: "25px" }} />
                 <FormControl variant="standard" value={firstName}>
