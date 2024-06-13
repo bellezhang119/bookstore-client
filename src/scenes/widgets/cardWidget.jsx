@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
-const CardWidget = ({ product }) => {
+const CardWidget = ({ product, setLoading }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,6 +26,22 @@ const CardWidget = ({ product }) => {
   const medium = palette.neutral.medium;
 
   const { addToCart, addToWishlist } = useCartWishlist();
+
+  const handleAddCart = async () => {
+    setLoading(true);
+    const result = await addToCart(product);
+    if (result) {
+      setLoading(false);
+    }
+  };
+
+  const handleAddWishlist = async () => {
+    setLoading(true);
+    const result = await addToWishlist(product);
+    if (result) {
+      setLoading(false);
+    }
+  };
 
   const user = useSelector((state) => state.user);
   const _id = user ? user._id : null;
@@ -103,7 +119,7 @@ const CardWidget = ({ product }) => {
           <Button
             variant="outlined"
             startIcon={<AddShoppingCart />}
-            onClick={() => addToCart(product)}
+            onClick={handleAddCart}
             sx={{
               marginBottom: "0.3rem",
               backgroundColor: primary,
@@ -122,7 +138,7 @@ const CardWidget = ({ product }) => {
           <Button
             variant="outlined"
             startIcon={<FavoriteBorder />}
-            onClick={() => addToWishlist(product)}
+            onClick={handleAddWishlist}
             sx={{
               color: primary,
               backgroundColor: palette.background.alt,

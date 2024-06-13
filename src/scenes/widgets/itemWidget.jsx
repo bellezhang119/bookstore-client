@@ -12,9 +12,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
+import LoadingWidget from "scenes/widgets/loadingWidget";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
-const ItemWidget = ({ product, initialCount, context, onDelete }) => {
+const ItemWidget = ({ product, initialCount, context, onDelete, setLoading }) => {
   const [count, setCount] = useState(initialCount);
   const isMobile = useMediaQuery("(max-width: 500px)");
   const theme = useTheme();
@@ -30,32 +31,38 @@ const ItemWidget = ({ product, initialCount, context, onDelete }) => {
   } = useCartWishlist();
 
   const handleAdd = async () => {
+    setLoading(true);
     const result =
       context === "cart"
         ? await addToCart(product)
         : await addToWishlist(product);
     if (result) {
       setCount(count + 1);
+      setLoading(false);
     }
   };
 
   const handleRemove = async () => {
+    setLoading(true);
     const result =
       context === "cart"
         ? await removeFromCart(product)
         : await removeFromWishlist(product);
     if (result) {
       setCount(count - 1);
+      setLoading(false);
     }
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     const result =
       context === "cart"
         ? await deleteFromCart(product)
         : await deleteFromWishlist(product);
     if (result) {
       onDelete();
+      setLoading(false);
     }
   };
 

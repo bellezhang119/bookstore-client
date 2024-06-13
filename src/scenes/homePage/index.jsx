@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "scenes/navbar";
 import ProductWidget from "scenes/widgets/productWidget";
 import CardWidget from "scenes/widgets/cardWidget";
+import LoadingWidget from "scenes/widgets/loadingWidget";
 import useWindowWidth from "hooks/useWindowWidth.js";
 
 const HomePage = () => {
@@ -13,6 +14,7 @@ const HomePage = () => {
   const [featuredProduct, setFeaturedProduct] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [cardDisplayed, setCardDisplayed] = useState(4);
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const HomePage = () => {
 
   const getProducts = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`http://localhost:3001/api/products/`, {
         method: "GET",
       });
@@ -39,6 +42,7 @@ const HomePage = () => {
       const products = await response.json();
       setFeaturedProduct(products[1]);
       setProductList(products.slice(0, 15));
+      setLoading(false);
     } catch (err) {
       console.log("Failed to get products:", err.message);
     }
@@ -71,7 +75,7 @@ const HomePage = () => {
         }}
       >
         <Box margin="1rem" maxWidth="90%">
-          {featuredProduct && <ProductWidget product={featuredProduct} />}
+          {featuredProduct && <ProductWidget product={featuredProduct} setLoading={setLoading} />}
         </Box>
 
         <Box display="flex" alignItems="center">
@@ -89,7 +93,7 @@ const HomePage = () => {
               .slice(startIndex, startIndex + cardDisplayed)
               .map((item) => (
                 <Box key={item._id} marginX="3px">
-                  <CardWidget key={item._id} product={item} />
+                  <CardWidget key={item._id} product={item} setLoading={setLoading} />
                 </Box>
               ))}
           </Box>
@@ -99,6 +103,7 @@ const HomePage = () => {
           </IconButton>
         </Box>
       </Box>
+      <LoadingWidget open={loading} />
     </Box>
   );
 };

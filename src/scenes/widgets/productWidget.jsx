@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
-const ProductWidget = ({ product }) => {
+const ProductWidget = ({ product, setLoading }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,6 +29,22 @@ const ProductWidget = ({ product }) => {
   const isAuth = Boolean(useSelector((state) => state.token));
 
   const { addToCart, addToWishlist } = useCartWishlist();
+
+  const handleAddCart = async () => {
+    setLoading(true);
+    const result = await addToCart(product);
+    if (result) {
+      setLoading(false);
+    }
+  };
+
+  const handleAddWishlist = async () => {
+    setLoading(true);
+    const result = await addToWishlist(product);
+    if (result) {
+      setLoading(false);
+    }
+  };
 
   const isMobile = useMediaQuery("(max-width: 500px)");
   const mediumMain = palette.neutral.mediumMain;
@@ -84,7 +100,7 @@ const ProductWidget = ({ product }) => {
                   <Button
                     variant="outlined"
                     startIcon={<AddShoppingCart />}
-                    onClick={() => addToCart(product)}
+                    onClick={handleAddCart}
                     sx={{
                       marginBottom: "0.3rem",
                       backgroundColor: primary,
@@ -103,7 +119,7 @@ const ProductWidget = ({ product }) => {
                   <Button
                     variant="outlined"
                     startIcon={<FavoriteBorder />}
-                    onClick={() => addToWishlist(product)}
+                    onClick={handleAddWishlist}
                     sx={{
                       color: primary,
                       backgroundColor: palette.background.alt,
@@ -126,7 +142,7 @@ const ProductWidget = ({ product }) => {
                 <Button
                   variant="outlined"
                   startIcon={<AddShoppingCart />}
-                  onClick={() => addToCart(product)}
+                  onClick={handleAddCart}
                   sx={{
                     backgroundColor: primary,
                     color: palette.background.alt,
@@ -141,7 +157,7 @@ const ProductWidget = ({ product }) => {
                 <Button
                   variant="outlined"
                   startIcon={<FavoriteBorder />}
-                  onClick={() => addToWishlist(product)}
+                  onClick={handleAddWishlist}
                   sx={{
                     color: primary,
                     backgroundColor: palette.background.alt,

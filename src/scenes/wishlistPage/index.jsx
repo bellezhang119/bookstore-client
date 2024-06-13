@@ -9,6 +9,7 @@ import {
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import ItemWidget from "scenes/widgets/itemWidget";
+import LoadingWidget from "scenes/widgets/loadingWidget";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,9 +20,9 @@ const WishlistPage = () => {
   const navigate = useNavigate();
   const [wishlist, setWishlist] = useState(null);
   const [totalPrice, setTotalPrice] = useState("0");
+  const [loading, setLoading] = useState(false);
 
   const { palette } = useTheme();
-
   const token = useSelector((state) => state.token);
   const user = useSelector((state) => state.user);
   const _id = user ? user._id : null;
@@ -51,6 +52,7 @@ const WishlistPage = () => {
       return;
     }
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:3001/api/users/${_id}/cart/add/wishlist`,
         {
@@ -63,10 +65,11 @@ const WishlistPage = () => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.msg || 'Failed to add wishlist to cart');
+        throw new Error(err.msg || "Failed to add wishlist to cart");
       }
 
       navigate(`/cart/${_id}`);
+      setLoading(false);
     } catch (error) {
       console.error("Error adding wishlist to cart:", error.message);
     }
@@ -78,6 +81,7 @@ const WishlistPage = () => {
       return; // Return early if user is not authenticated
     }
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:3001/api/users/${_id}/wishlist`,
         {
@@ -92,9 +96,10 @@ const WishlistPage = () => {
         throw new Error("Failed to fetch wishlist data");
       }
 
-      const wishlistData = await response.json(); // Parse response JSON
+      const wishlistData = await response.json();
 
       setWishlist(wishlistData);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching wishlist data:", error.message);
     }
@@ -121,6 +126,7 @@ const WishlistPage = () => {
               initialCount={item.quantity}
               context="wishlist"
               onDelete={onDelete}
+              setLoading={setLoading}
             />
           ))}
         <WidgetWrapper
@@ -186,6 +192,7 @@ const WishlistPage = () => {
           )}
         </WidgetWrapper>
       </Box>
+      <LoadingWidget open={loading} />
     </Box>
   );
 };

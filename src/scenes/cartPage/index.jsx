@@ -9,6 +9,7 @@ import {
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import ItemWidget from "scenes/widgets/itemWidget";
+import LoadingWidget from "scenes/widgets/loadingWidget";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,6 +20,7 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [totalPrice, setTotalPrice] = useState("0");
+  const [loading, setLoading] = useState(false);
 
   const { palette } = useTheme();
 
@@ -51,6 +53,7 @@ const CartPage = () => {
       return; // Return early if user is not authenticated
     }
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:3001/api/users/${_id}/cart`,
         {
@@ -69,6 +72,7 @@ const CartPage = () => {
       const cartData = await response.json(); // Parse response JSON
 
       setCart(cartData);
+      setLoading(false);
     } catch (err) {
       console.error("Error fetching cart data:", err.message);
     }
@@ -95,6 +99,7 @@ const CartPage = () => {
               initialCount={item.quantity}
               context="cart"
               onDelete={onDelete}
+              setLoading={setLoading}
             />
           ))}
         <WidgetWrapper
@@ -158,6 +163,7 @@ const CartPage = () => {
           )}
         </WidgetWrapper>
       </Box>
+      <LoadingWidget open={loading} />
     </Box>
   );
 };
