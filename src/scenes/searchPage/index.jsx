@@ -46,10 +46,11 @@ const SearchPage = () => {
         const data = await response.json();
         setSearchResults(data);
       } else {
-        console.error("Error fetching search results");
+        const err = await response.json();
+        throw new Error(err.msg || 'Failed to get search results');
       }
-    } catch (error) {
-      console.error("Error fetching search results:", error);
+    } catch (err) {
+      console.error("Error fetching search results:", err.message);
     }
   };
 

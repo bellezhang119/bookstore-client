@@ -26,13 +26,23 @@ const HomePage = () => {
   }, [windowWidth]);
 
   const getProducts = async () => {
-    const response = await fetch(`http://localhost:3001/api/products/`, {
-      method: "GET",
-    });
-
-    const products = await response.json();
-    setFeaturedProduct(products[1]);
-    setProductList(products.slice(0, 15));
+    try {
+      const response = await fetch(`http://localhost:3001/api/products/`, {
+        method: "GET",
+      });
+  
+      if (!response.ok) {
+        const err = await response.json();
+          throw new Error(err.msg || 'Failed to get products');
+      }
+  
+      const products = await response.json();
+      setFeaturedProduct(products[1]);
+      setProductList(products.slice(0, 15));
+    } catch (err) {
+      console.log("Failed to get products:", err.message);
+    }
+    
   };
 
   const handleNextClick = () => {

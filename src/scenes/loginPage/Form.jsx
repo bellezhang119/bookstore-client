@@ -62,47 +62,65 @@ const Form = () => {
   const [loginError, setLoginError] = useState("");
 
   const register = async (values, onSubmitProps) => {
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+    try {
+      const savedUserResponse = await fetch(
+        "http://localhost:3001/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      if (!savedUserResponse.ok) {
+        const err = await savedUserResponse.json();
+        throw new Error(err.message || "Failed to register user");
       }
-    );
 
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
+      const savedUser = await savedUserResponse.json();
+      onSubmitProps.resetForm();
 
-    if (savedUser) {
-      setPageType("login");
+      if (savedUser) {
+        setPageType("login");
+      }
+    } catch (err) {
+      console.log("Failed to register user:", err.message);
     }
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch(
-      "http://localhost:3001/api/auth/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      }
-    );
-    const loggedIn = await loggedInResponse.json();
-    if (loggedInResponse.status === 400) {
-      setLoginError("Email or password is incorrect");
-    } else if (loggedIn) {
-      onSubmitProps.resetForm();
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
+    try {
+      const loggedInResponse = await fetch(
+        "http://localhost:3001/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        }
       );
-      navigate("/");
+      if (!loggedInResponse.ok) {
+        const err = loggedInResponse.json();
+        throw new Error(err.message || "Failed to login user");
+      }
+      const loggedIn = await loggedInResponse.json();
+      if (loggedInResponse.status === 400) {
+        setLoginError("Email or password is incorrect");
+      } else if (loggedIn) {
+        onSubmitProps.resetForm();
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/");
+      }
+    } catch (err) {
+      console.log("Failed to login user:", err.message);
     }
+    
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {

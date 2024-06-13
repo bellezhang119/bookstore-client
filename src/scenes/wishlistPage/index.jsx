@@ -45,6 +45,33 @@ const WishlistPage = () => {
     setTotalPrice(parseFloat(price.toFixed(2)));
   };
 
+  const addWishlistToCart = async () => {
+    if (!isAuth) {
+      navigate(`/login`);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/users/${_id}/cart/add/wishlist`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.msg || 'Failed to add wishlist to cart');
+      }
+
+      navigate(`/cart/${_id}`);
+    } catch (error) {
+      console.error("Error adding wishlist to cart:", error.message);
+    }
+  };
+
   const getWishlist = async () => {
     if (!isAuth) {
       navigate("/login");
@@ -124,6 +151,7 @@ const WishlistPage = () => {
                     color: palette.primary.main,
                   },
                 }}
+                onClick={addWishlistToCart}
               >
                 Add To Cart
               </Button>
@@ -150,6 +178,7 @@ const WishlistPage = () => {
                     color: palette.primary.main,
                   },
                 }}
+                onClick={addWishlistToCart}
               >
                 Add To Cart
               </Button>

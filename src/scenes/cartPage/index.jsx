@@ -62,14 +62,15 @@ const CartPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch cart data");
+        const err = await response.json();
+        throw new Error(err.msg || 'Failed to fetch cart data');
       }
 
       const cartData = await response.json(); // Parse response JSON
 
       setCart(cartData);
-    } catch (error) {
-      console.error("Error fetching cart data:", error.message);
+    } catch (err) {
+      console.error("Error fetching cart data:", err.message);
     }
   };
 
