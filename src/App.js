@@ -6,6 +6,7 @@ import SearchPage from "./scenes/searchPage";
 import ProductPage from "./scenes/productPage";
 import CartPage from "./scenes/cartPage";
 import WishlistPage from "./scenes/wishlistPage";
+import OrdersPage from "./scenes/ordersPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -30,6 +31,7 @@ function App() {
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/cart/:userId" element={<CartPage />} />
             <Route path="/wishlist/:userId" element={<WishlistPage />} />
+            <Route path="/orders/:userId" element={<OrdersPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

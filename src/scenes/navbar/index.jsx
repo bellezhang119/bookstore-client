@@ -149,8 +149,18 @@ const Navbar = () => {
               >
                 <Favorite sx={{ fontSize: "25px" }} />
               </IconButton>
-
-              <RequestPage sx={{ fontSize: "25px" }} />
+              <IconButton
+                sx={{
+                  color: neutral.dark,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: neutral.medium,
+                  },
+                }}
+                onClick={() => navigate(`/orders/${_id}`)}
+              >
+                <RequestPage sx={{ fontSize: "25px" }} />
+              </IconButton>
               <Settings sx={{ fontSize: "25px" }} />
               <FormControl variant="standard" value={firstName}>
                 <Select
@@ -267,7 +277,18 @@ const Navbar = () => {
                 >
                   <Favorite sx={{ fontSize: "25px" }} />
                 </IconButton>
-                <RequestPage sx={{ fontSize: "25px" }} />
+                <IconButton
+                  sx={{
+                    color: neutral.dark,
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: neutral.medium,
+                    },
+                  }}
+                  onClick={() => navigate(`/orders/${_id}`)}
+                >
+                  <RequestPage sx={{ fontSize: "25px" }} />
+                </IconButton>
                 <Settings sx={{ fontSize: "25px" }} />
                 <FormControl variant="standard" value={firstName}>
                   <Select

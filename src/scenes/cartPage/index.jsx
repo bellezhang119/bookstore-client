@@ -66,7 +66,7 @@ const CartPage = () => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.msg || 'Failed to fetch cart data');
+        throw new Error(err.msg || "Failed to fetch cart data");
       }
 
       const cartData = await response.json(); // Parse response JSON
@@ -75,6 +75,45 @@ const CartPage = () => {
       setLoading(false);
     } catch (err) {
       console.error("Error fetching cart data:", err.message);
+    }
+  };
+
+  const createOrder = async () => {
+    if (!isAuth) {
+      navigate("/login");
+      return; // Return early if user is not authenticated
+    }
+    if (!cart || cart.length === 0) {
+      return;
+    }
+    try {
+      const payload = {
+        userId: _id,
+        productList: cart.map((item) => ({
+          productId: item.product._id,
+          quantity: item.quantity,
+          productPrice: item.product.productPrice,
+          picturePath: item.product.picturePath,
+        })),
+      };
+      setLoading(true);
+      const response = await fetch(`http://localhost:3001/api/orders/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.msg || "Failed to create order");
+      }
+      setLoading(false);
+      getCart();
+    } catch (err) {
+      console.error("Failed to create order", err.message);
     }
   };
 
@@ -130,6 +169,7 @@ const CartPage = () => {
                     color: palette.primary.main,
                   },
                 }}
+                onClick={createOrder}
               >
                 Checkout
               </Button>
@@ -156,6 +196,7 @@ const CartPage = () => {
                     color: palette.primary.main,
                   },
                 }}
+                onClick={createOrder}
               >
                 Checkout
               </Button>
