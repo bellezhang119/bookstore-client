@@ -56,8 +56,8 @@ const ProductWidget = ({ product, setLoading }) => {
         <Box>
           <ProductImage
             image={product?.picturePath}
-            width="150px"
-            height="230px"
+            width={isMobile? "100" : "150"}
+            height={isMobile? "160" : "230"}
           />
         </Box>
         <Box>
