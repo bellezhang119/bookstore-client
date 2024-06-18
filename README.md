@@ -17,6 +17,16 @@ This project is a frontend client for a bookstore application. It provides a use
 - **React Router**: Declarative routing for React applications.
 - **Axios**: HTTP client for making requests to the backend server.
 
+## Screenshots
+
+![Home page](images/homepage.png)
+![Cart](images/cart.png)
+![Order page](images/orderpage.png)
+![Login page](images/login.png)
+![Home page mobile](images/homepagemobile.png)
+![Wishlist mobile](images/wishlistmobile.png)
+![Dark mode](images/darkmode.png)
+
 ## Getting Started
 
 ### Prerequisites
