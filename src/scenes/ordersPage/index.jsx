@@ -1,19 +1,9 @@
-import {
-  Box,
-  Typography,
-  useTheme,
-  Button,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material";
-import FlexBetween from "components/FlexBetween";
+import { Box, Typography, useTheme, Button } from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
-import ItemWidget from "scenes/widgets/itemWidget";
-import LoadingWidget from "scenes/widgets/loadingWidget";
 import ProductImage from "components/ProductImage";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
 
 const OrdersPage = () => {
@@ -28,11 +18,8 @@ const OrdersPage = () => {
   const _id = user ? user._id : null;
   const isAuth = Boolean(token);
 
-  useEffect(() => {
-    getOrders();
-  }, []);
-
-  const getOrders = async () => {
+  // Get orders associated to user
+  const getOrders = useCallback(async () => {
     if (!isAuth) {
       navigate("/login");
       return;
@@ -57,7 +44,11 @@ const OrdersPage = () => {
     } catch (err) {
       console.error("Error fetching user orders:", err.message);
     }
-  };
+  }, [isAuth, navigate, token, _id]);
+
+  useEffect(() => {
+    getOrders();
+  }, [getOrders]);
 
   return (
     <Box>

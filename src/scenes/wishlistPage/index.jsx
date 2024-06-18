@@ -3,16 +3,14 @@ import {
   Typography,
   useTheme,
   Button,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import ItemWidget from "scenes/widgets/itemWidget";
 import LoadingWidget from "scenes/widgets/loadingWidget";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
 
 const WishlistPage = () => {
@@ -28,24 +26,7 @@ const WishlistPage = () => {
   const _id = user ? user._id : null;
   const isAuth = Boolean(token);
 
-  useEffect(() => {
-    getWishlist();
-  }, []);
-
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [wishlist]);
-
-  const calculateTotalPrice = () => {
-    let price = 0;
-    wishlist?.forEach((item) => {
-      const itemPrice = parseFloat(item.product.productPrice) || 0;
-      const itemQuantity = parseInt(item.quantity) || 0;
-      price += itemPrice * itemQuantity;
-    });
-    setTotalPrice(parseFloat(price.toFixed(2)));
-  };
-
+  // Append all of wishlist to cart
   const addWishlistToCart = async () => {
     if (!isAuth) {
       navigate(`/login`);
@@ -75,7 +56,8 @@ const WishlistPage = () => {
     }
   };
 
-  const getWishlist = async () => {
+  // Get user's wishlist
+  const getWishlist = useCallback(async () => {
     if (!isAuth) {
       navigate("/login");
       return; // Return early if user is not authenticated
@@ -103,7 +85,26 @@ const WishlistPage = () => {
     } catch (error) {
       console.error("Error fetching wishlist data:", error.message);
     }
-  };
+  }, [isAuth, token, _id, navigate]);
+
+  // Calculate total price of items in wishlist
+  const calculateTotalPrice = useCallback(() => {
+    let price = 0;
+    wishlist?.forEach((item) => {
+      const itemPrice = parseFloat(item.product.productPrice) || 0;
+      const itemQuantity = parseInt(item.quantity) || 0;
+      price += itemPrice * itemQuantity;
+    });
+    setTotalPrice(parseFloat(price.toFixed(2)));
+  }, [wishlist]);
+
+  useEffect(() => {
+    getWishlist();
+  }, [getWishlist]);
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [wishlist, calculateTotalPrice]);
 
   const onDelete = () => {
     getWishlist();

@@ -3,16 +3,14 @@ import {
   Typography,
   useTheme,
   Button,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import ItemWidget from "scenes/widgets/itemWidget";
 import LoadingWidget from "scenes/widgets/loadingWidget";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
 
 const CartPage = () => {
@@ -29,35 +27,18 @@ const CartPage = () => {
   const _id = user ? user._id : null;
   const isAuth = Boolean(token);
 
-  useEffect(() => {
-    getCart();
-  }, []);
-
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [cart]);
-
-  const calculateTotalPrice = () => {
-    let price = 0;
-    cart?.forEach((item) => {
-      const itemPrice = parseFloat(item.product.productPrice) || 0;
-      const itemQuantity = parseInt(item.quantity) || 0;
-      price += itemPrice * itemQuantity;
-    });
-    setTotalPrice(parseFloat(price.toFixed(2)));
-  };
-
-  const getCart = async () => {
+  // Get user cart
+  const getCart = useCallback(async () => {
     if (!isAuth) {
       navigate("/login");
-      return; // Return early if user is not authenticated
+      return;
     }
     try {
       setLoading(true);
       const response = await fetch(
         `http://localhost:3001/api/users/${_id}/cart`,
         {
-          method: "GET", // Change method to GET
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -69,19 +50,40 @@ const CartPage = () => {
         throw new Error(err.msg || "Failed to fetch cart data");
       }
 
-      const cartData = await response.json(); // Parse response JSON
+      const cartData = await response.json();
 
       setCart(cartData);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching cart data:", err.message);
+      setLoading(false);
     }
-  };
+  }, [isAuth, navigate, token, _id]);
 
+  // Calculate total price of cart
+  const calculateTotalPrice = useCallback(() => {
+    let price = 0;
+    cart?.forEach((item) => {
+      const itemPrice = parseFloat(item.product.productPrice) || 0;
+      const itemQuantity = parseInt(item.quantity) || 0;
+      price += itemPrice * itemQuantity;
+    });
+    setTotalPrice(parseFloat(price.toFixed(2)));
+  }, [cart]);
+
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [cart, calculateTotalPrice]);
+
+  // Create new order in database with current items in cart
   const createOrder = async () => {
     if (!isAuth) {
       navigate("/login");
-      return; // Return early if user is not authenticated
+      return;
     }
     if (!cart || cart.length === 0) {
       return;

@@ -4,29 +4,20 @@ import {
   Typography,
   useTheme,
   Button,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
 import ProductImage from "components/ProductImage";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
 const CardWidget = ({ product, setLoading }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const { palette } = useTheme();
-  const main = palette.neutral.main;
   const primary = palette.primary.main;
-  const mediumMain = palette.neutral.mediumMain;
-  const medium = palette.neutral.medium;
 
   const { addToCart, addToWishlist } = useCartWishlist();
 
+  // Use hook to add item to cart
   const handleAddCart = async () => {
     setLoading(true);
     const result = await addToCart(product);
@@ -35,6 +26,7 @@ const CardWidget = ({ product, setLoading }) => {
     }
   };
 
+  // Use hook to add item to wishlist
   const handleAddWishlist = async () => {
     setLoading(true);
     const result = await addToWishlist(product);
@@ -42,11 +34,6 @@ const CardWidget = ({ product, setLoading }) => {
       setLoading(false);
     }
   };
-
-  const user = useSelector((state) => state.user);
-  const _id = user ? user._id : null;
-  const token = useSelector((state) => state.token);
-  const isAuth = Boolean(useSelector((state) => state.token));
 
   const isMobile = useMediaQuery("(max-width: 500px)");
 

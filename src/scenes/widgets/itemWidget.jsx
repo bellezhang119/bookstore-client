@@ -2,20 +2,24 @@ import {
   Box,
   Typography,
   useTheme,
-  Button,
   IconButton,
   useMediaQuery,
 } from "@mui/material";
 import ProductImage from "components/ProductImage";
 import { Add, Remove, Delete } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
-import LoadingWidget from "scenes/widgets/loadingWidget";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
-const ItemWidget = ({ product, initialCount, context, onDelete, setLoading }) => {
+const ItemWidget = ({
+  product,
+  initialCount,
+  context,
+  onDelete,
+  setLoading,
+}) => {
   const [count, setCount] = useState(initialCount);
   const isMobile = useMediaQuery("(max-width: 500px)");
   const theme = useTheme();
@@ -30,6 +34,8 @@ const ItemWidget = ({ product, initialCount, context, onDelete, setLoading }) =>
     deleteFromWishlist,
   } = useCartWishlist();
 
+  // If parent component is cart, add to cart
+  // Else add to wishlist
   const handleAdd = async () => {
     setLoading(true);
     const result =
@@ -42,6 +48,8 @@ const ItemWidget = ({ product, initialCount, context, onDelete, setLoading }) =>
     }
   };
 
+  // If parent component is cart, remove from cart
+  // Else remove from wishlist
   const handleRemove = async () => {
     setLoading(true);
     const result =
@@ -54,6 +62,8 @@ const ItemWidget = ({ product, initialCount, context, onDelete, setLoading }) =>
     }
   };
 
+  // If parent component is cart, delete from cart
+  // Else delete from wishlist
   const handleDelete = async () => {
     setLoading(true);
     const result =

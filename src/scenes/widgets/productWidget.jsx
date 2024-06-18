@@ -4,29 +4,19 @@ import {
   Typography,
   useTheme,
   Button,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import ProductImage from "components/ProductImage";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 
 const ProductWidget = ({ product, setLoading }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 500px)");
 
   const { palette } = useTheme();
-  const main = palette.neutral.main;
   const primary = palette.primary.main;
-
-  const user = useSelector((state) => state.user);
-  const _id = user ? user._id : null;
-  const token = useSelector((state) => state.token);
-  const isAuth = Boolean(useSelector((state) => state.token));
 
   const { addToCart, addToWishlist } = useCartWishlist();
 
@@ -46,18 +36,14 @@ const ProductWidget = ({ product, setLoading }) => {
     }
   };
 
-  const isMobile = useMediaQuery("(max-width: 500px)");
-  const mediumMain = palette.neutral.mediumMain;
-  const medium = palette.neutral.medium;
-
   return (
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
         <Box>
           <ProductImage
             image={product?.picturePath}
-            width={isMobile? "100" : "150"}
-            height={isMobile? "160" : "230"}
+            width={isMobile ? "100" : "150"}
+            height={isMobile ? "160" : "230"}
           />
         </Box>
         <Box>

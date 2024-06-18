@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 
+// Component for displaying image
 const ProductImage = ({ image, width, height }) => {
   return (
     <Box width={width} height={height} marginBottom="1rem">

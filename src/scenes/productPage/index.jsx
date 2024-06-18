@@ -3,16 +3,14 @@ import {
   Typography,
   useTheme,
   Button,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
 import { AddShoppingCart, FavoriteBorder } from "@mui/icons-material";
 import FlexBetween from "components/FlexBetween";
 import ProductImage from "components/ProductImage";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useCartWishlist } from "hooks/useCartWishlist.js";
 import Navbar from "scenes/navbar";
 
@@ -20,16 +18,13 @@ const ProductPage = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const { addToCart, addToWishlist } = useCartWishlist();
   const { palette } = useTheme();
-  const main = palette.neutral.main;
   const primary = palette.primary.main;
 
   const isMobile = useMediaQuery("(max-width: 500px)");
 
+  // Fetch product information
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await fetch(

@@ -7,16 +7,15 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin, setCartState, setWishlistState, setOrders } from "state";
-import FlexBetween from "components/FlexBetween";
+import { setLogin } from "state";
 
 const currentDate = new Date().toISOString().substr(0, 10);
 
+// Define form for register
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -32,6 +31,7 @@ const registerSchema = yup.object().shape({
     .min(8, "Password is too short - should be 8 chars minimum."),
 });
 
+// Define form for login
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
@@ -61,6 +61,7 @@ const Form = () => {
   const isRegister = pageType === "register";
   const [loginError, setLoginError] = useState("");
 
+  // Register user
   const register = async (values, onSubmitProps) => {
     try {
       const savedUserResponse = await fetch(
@@ -90,6 +91,7 @@ const Form = () => {
     }
   };
 
+  // Login user
   const login = async (values, onSubmitProps) => {
     try {
       const loggedInResponse = await fetch(
@@ -120,7 +122,6 @@ const Form = () => {
     } catch (err) {
       console.log("Failed to login user:", err.message);
     }
-    
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {

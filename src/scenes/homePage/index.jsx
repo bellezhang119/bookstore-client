@@ -1,14 +1,6 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  useMediaQuery,
-  Container,
-  Grid,
-} from "@mui/material";
+import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "scenes/navbar";
 import ProductWidget from "scenes/widgets/productWidget";
 import CardWidget from "scenes/widgets/cardWidget";
@@ -24,18 +16,19 @@ const HomePage = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [cardDisplayed, setCardDisplayed] = useState(4);
   const [loading, setLoading] = useState(false);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     getProducts();
   }, []);
 
+  // Define how many cards should be displayed per page by dividing the window width with roughly the width of the cards
   useEffect(() => {
     if (windowWidth) {
       setCardDisplayed(Math.floor(windowWidth / 230));
     }
   }, [windowWidth]);
 
+  // Get products for featured product and recommended products
   const getProducts = async () => {
     try {
       setLoading(true);
@@ -57,12 +50,14 @@ const HomePage = () => {
     }
   };
 
+  // Handle click for next page of cards
   const handleNextClick = () => {
     setStartIndex((prevIndex) =>
       Math.min(prevIndex + cardDisplayed, productList.length - cardDisplayed)
     );
   };
 
+  // Handle click for previous page of cards
   const handlePrevClick = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - cardDisplayed, 0));
   };

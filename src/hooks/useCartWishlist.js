@@ -1,22 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  addToCartState,
-  addToWishlistState,
-  removeFromCartState,
-  removeFromWishlistState,
-  deleteFromCartState,
-  deleteFromWishlistState,
-} from "state";
 
+// Hook for cart and wishlist operations
 export const useCartWishlist = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const user = useSelector((state) => state.user);
   const _id = user ? user._id : null;
   const isAuth = Boolean(token);
 
+  // Add item to cart
   const addToCart = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -33,7 +26,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(addToCartState({productId: product._id}));
           console.log("Item added to cart");
           return true;
         } else {
@@ -46,6 +38,7 @@ export const useCartWishlist = () => {
     }
   };
 
+  // Add item to wishlist
   const addToWishlist = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -62,7 +55,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(addToWishlistState({productId: product._id}));
           console.log("Item added to wishlist");
           return true;
         } else {
@@ -75,6 +67,7 @@ export const useCartWishlist = () => {
     }
   };
 
+  // Remove item from cart
   const removeFromCart = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -91,7 +84,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(removeFromCartState({productId: product._id}));
           console.log("Item removed from cart");
           return true;
         } else {
@@ -104,6 +96,7 @@ export const useCartWishlist = () => {
     }
   };
 
+  // Remove item from wishlist
   const removeFromWishlist = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -120,7 +113,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(removeFromWishlistState({productId: product._id}));
           console.log("Item removed from wishlist");
           return true;
         } else {
@@ -133,6 +125,7 @@ export const useCartWishlist = () => {
     }
   };
 
+  // Delete item from cart
   const deleteFromCart = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -149,7 +142,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(deleteFromCartState({productId: product._id}));
           console.log("Item deleted from cart");
           return true;
         } else {
@@ -162,6 +154,7 @@ export const useCartWishlist = () => {
     }
   };
 
+  // Delete item from wishlist
   const deleteFromWishlist = async (product) => {
     if (!isAuth) {
       navigate("/login");
@@ -178,7 +171,6 @@ export const useCartWishlist = () => {
         );
 
         if (response.ok) {
-          //dispatch(deleteFromWishlistState({productId: product._id}));
           console.log("Item deleted from wishlist");
           return true;
         } else {

@@ -1,6 +1,5 @@
-import { Box, useMediaQuery, Container, Grid } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+import { Box, useMediaQuery, Grid } from "@mui/material";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "scenes/navbar";
 import ProductWidget from "scenes/widgets/productWidget";
@@ -25,11 +24,8 @@ const SearchPage = () => {
     setSort(newSort);
   };
 
-  useEffect(() => {
-    getSearchResults();
-  }, [location, filters, sort]);
-
-  const getSearchResults = async () => {
+  // Get products according to search and filters
+  const getSearchResults = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
         search: query,
@@ -47,12 +43,16 @@ const SearchPage = () => {
         setSearchResults(data);
       } else {
         const err = await response.json();
-        throw new Error(err.msg || 'Failed to get search results');
+        throw new Error(err.msg || "Failed to get search results");
       }
     } catch (err) {
       console.error("Error fetching search results:", err.message);
     }
-  };
+  }, [filters, sort, query]);
+
+  useEffect(() => {
+    getSearchResults();
+  }, [getSearchResults, location]);
 
   const categories = [
     "Drama",

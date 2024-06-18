@@ -18,12 +18,18 @@ import {
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 
+// Configuration object for redux-persist
 const persistConfig = { key: "root", storage, version: 1 };
+
+// Wrap the reducer with persistReducer to enable state persistence
 const persistedReducer = persistReducer(persistConfig, authRecuder);
+
+// Configure Redux store with persistedReducer and custom middleware
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
+      // Ignore certain Redux actions for serialization
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
